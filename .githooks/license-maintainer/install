@@ -27,22 +27,16 @@ fi
 
 cd "$(dirname "$0")/../.."
 
-$opts = "-snv"
+linkcmd="ln -snv"
 if [[ "$OSTYPE" != "darwin"* ]] ; then
-    $opts = $opts + ""
-    for i in pre-commit ; do
-        oldlink="$(readlink .git/hooks/${i} ||:)"
-        newlink="../../.githooks/license-maintainer/${i}"
-        if [ "$newlink" != "$oldlink" ]; then
-        ln -snv "${newlink}" .git/hooks/
-        fi
-    done
-else
-    for i in pre-commit ; do
-        oldlink="$(readlink .git/hooks/${i} ||:)"
-        newlink="../../.githooks/license-maintainer/${i}"
-        if [ "$newlink" != "$oldlink" ]; then
-        ln -snv --backup=numbered "${newlink}" .git/hooks/
-        fi
-    done
+    linkcmd="$linkcmd --backup=numbered"
 fi
+
+for i in pre-commit ; do
+    oldlink="$(readlink .git/hooks/${i} ||:)"
+    newlink="../../.githooks/license-maintainer/${i}"
+    if [ "$newlink" != "$oldlink" ]; then
+    $linkcmd "${newlink}" .git/hooks/
+    fi
+done
+
