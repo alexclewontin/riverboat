@@ -244,6 +244,7 @@ func TestGame_GenerateOmniViewChangedVals(t *testing.T) {
 			wantErr: false,
 		},
 		// TODO: Add test cases.
+		// TODO: Add test for changes to pots, especially the slices within
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
