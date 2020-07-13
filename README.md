@@ -6,8 +6,6 @@ A full-service Go Texas hold'em library, featuring an ultra-fast poker hand eval
 
 ## Table of Contents (Optional)
 
-> If your `README` has a lot of info, section headers might be nice.
-
 - [Riverboat](#riverboat)
   - [Table of Contents (Optional)](#table-of-contents-optional)
   - [Features](#features)
