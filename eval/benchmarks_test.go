@@ -21,6 +21,31 @@
 //* OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 //* OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+//* This file incorporates modified benchmark data from https://github.com/chehsunliu/poker
+//* covered by the following license:
+
+// * MIT License
+// *
+// * Copyright (c) 2018 Che-Hsun Liu
+// *
+// * Permission is hereby granted, free of charge, to any person obtaining a copy
+// * of this software and associated documentation files (the "Software"), to deal
+// * in the Software without restriction, including without limitation the rights
+// * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// * copies of the Software, and to permit persons to whom the Software is
+// * furnished to do so, subject to the following conditions:
+// *
+// * The above copyright notice and this permission notice shall be included in all
+// * copies or substantial portions of the Software.
+// *
+// * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// * SOFTWARE.
+
 package eval
 
 import (
@@ -31,43 +56,43 @@ import (
 	"github.com/notnil/joker/hand"
 )
 
-var dataPoker1 = map[int32]string{
-	6252: `["As", "Ks", "Jc", "7h", "5d"]`, // high card
-	3448: `["As", "Ac", "Jc", "7h", "5d"]`, // pair
-	2497: `["As", "Ac", "Jc", "Jd", "5d"]`, // two pair
-	1636: `["As", "Ac", "Ad", "Jd", "5d"]`, // three of a kind
-	1600: `["As", "Ks", "Qd", "Jh", "Td"]`, // straight
-	1542: `["Ts", "7s", "4s", "3s", "2s"]`, // flush
-	298:  `["4s", "4c", "4d", "2s", "2h"]`, // full house
-	19:   `["As", "Ac", "Ad", "Ah", "5h"]`, // four of a kind
-	1:    `["As", "Ks", "Qs", "Js", "Ts"]`, // straight flush
+var dataPoker5 = []string{
+	`["As", "Ks", "Jc", "7h", "5d"]`, // high card
+	`["As", "Ac", "Jc", "7h", "5d"]`, // pair
+	`["As", "Ac", "Jc", "Jd", "5d"]`, // two pair
+	`["As", "Ac", "Ad", "Jd", "5d"]`, // three of a kind
+	`["As", "Ks", "Qd", "Jh", "Td"]`, // straight
+	`["Ts", "7s", "4s", "3s", "2s"]`, // flush
+	`["4s", "4c", "4d", "2s", "2h"]`, // full house
+	`["As", "Ac", "Ad", "Ah", "5h"]`, // four of a kind
+	`["As", "Ks", "Qs", "Js", "Ts"]`, // straight flush
 }
 
-var dataPoker2 = map[int32]string{
-	6252: `["3d", "As", "Ks", "Jc", "7h", "5d"]`, // high card
-	3448: `["3d", "As", "Ac", "Jc", "7h", "5d"]`, // pair
-	2497: `["3d", "As", "Ac", "Jc", "Jd", "5d"]`, // two pair
-	1636: `["3d", "As", "Ac", "Ad", "Jd", "5d"]`, // three of a kind
-	1600: `["3d", "As", "Ks", "Qd", "Jh", "Td"]`, // straight
-	1542: `["3d", "Ts", "7s", "4s", "3s", "2s"]`, // flush
-	298:  `["3d", "4s", "4c", "4d", "2s", "2h"]`, // full house
-	19:   `["3d", "As", "Ac", "Ad", "Ah", "5h"]`, // four of a kind
-	1:    `["3d", "As", "Ks", "Qs", "Js", "Ts"]`, // straight flush
+var dataPoker6 = []string{
+	`["3d", "As", "Ks", "Jc", "7h", "5d"]`, // high card
+	`["3d", "As", "Ac", "Jc", "7h", "5d"]`, // pair
+	`["3d", "As", "Ac", "Jc", "Jd", "5d"]`, // two pair
+	`["3d", "As", "Ac", "Ad", "Jd", "5d"]`, // three of a kind
+	`["3d", "As", "Ks", "Qd", "Jh", "Td"]`, // straight
+	`["3d", "Ts", "7s", "4s", "3s", "2s"]`, // flush
+	`["3d", "4s", "4c", "4d", "2s", "2h"]`, // full house
+	`["3d", "As", "Ac", "Ad", "Ah", "5h"]`, // four of a kind
+	`["3d", "As", "Ks", "Qs", "Js", "Ts"]`, // straight flush
 }
 
-var dataPoker3 = map[int32]string{
-	6252: `["2d", "3d", "As", "Ks", "Jc", "7h", "5d"]`, // high card
-	3448: `["2d", "3d", "As", "Ac", "Jc", "7h", "5d"]`, // pair
-	2497: `["2d", "3d", "As", "Ac", "Jc", "Jd", "5d"]`, // two pair
-	1636: `["2c", "3d", "As", "Ac", "Ad", "Jd", "5d"]`, // three of a kind
-	1600: `["2d", "3d", "As", "Ks", "Qd", "Jh", "Td"]`, // straight
-	1542: `["2d", "3d", "Ts", "7s", "4s", "3s", "2s"]`, // flush
-	298:  `["2d", "3d", "4s", "4c", "4d", "2s", "2h"]`, // full house
-	19:   `["2d", "3d", "As", "Ac", "Ad", "Ah", "5h"]`, // four of a kind
-	1:    `["2d", "3d", "As", "Ks", "Qs", "Js", "Ts"]`, // straight flush
+var dataPoker7 = []string{
+	`["2d", "3d", "As", "Ks", "Jc", "7h", "5d"]`, // high card
+	`["2d", "3d", "As", "Ac", "Jc", "7h", "5d"]`, // pair
+	`["2d", "3d", "As", "Ac", "Jc", "Jd", "5d"]`, // two pair
+	`["2c", "3d", "As", "Ac", "Ad", "Jd", "5d"]`, // three of a kind
+	`["2d", "3d", "As", "Ks", "Qd", "Jh", "Td"]`, // straight
+	`["2d", "3d", "Ts", "7s", "4s", "3s", "2s"]`, // flush
+	`["2d", "3d", "4s", "4c", "4d", "2s", "2h"]`, // full house
+	`["2d", "3d", "As", "Ac", "Ad", "Ah", "5h"]`, // four of a kind
+	`["2d", "3d", "As", "Ks", "Qs", "Js", "Ts"]`, // straight flush
 }
 
-var dataJoker1 = []string{
+var dataJoker5 = []string{
 	`["A♠", "K♠", "J♣", "7♥", "5♦"]`, // high card
 	`["A♠", "A♣", "J♣", "7♥", "5♦"]`, // pair
 	`["A♠", "A♣", "J♣", "J♦", "5♦"]`, // two pair
@@ -79,7 +104,7 @@ var dataJoker1 = []string{
 	`["A♠", "K♠", "Q♠", "J♠", "T♠"]`, // straight flush
 }
 
-var dataJoker2 = []string{
+var dataJoker6 = []string{
 	`["3♦", "A♠", "K♠", "J♣", "7♥", "5♦"]`, // high card
 	`["3♦", "A♠", "A♣", "J♣", "7♥", "5♦"]`, // pair
 	`["3♦", "A♠", "A♣", "J♣", "J♦", "5♦"]`, // two pair
@@ -91,7 +116,7 @@ var dataJoker2 = []string{
 	`["3♦", "A♠", "K♠", "Q♠", "J♠", "T♠"]`, // straight flush
 }
 
-var dataJoker3 = []string{
+var dataJoker7 = []string{
 	`["2♦", "3♦", "A♠", "K♠", "J♣", "7♥", "5♦"]`, // high card
 	`["2♦", "3♦", "A♠", "A♣", "J♣", "7♥", "5♦"]`, // pair
 	`["2♦", "3♦", "A♠", "A♣", "J♣", "J♦", "5♦"]`, // two pair
@@ -103,7 +128,7 @@ var dataJoker3 = []string{
 	`["2♦", "3♦", "A♠", "K♠", "Q♠", "J♠", "T♠"]`, // straight flush
 }
 
-var dataRiverboat1 = [][][]byte{
+var dataRiverboat5 = [][][]byte{
 	{[]byte("As"), []byte("Ks"), []byte("Jc"), []byte("7h"), []byte("5d")}, // high card
 	{[]byte("As"), []byte("Ac"), []byte("Jc"), []byte("7h"), []byte("5d")}, // pair
 	{[]byte("As"), []byte("Ac"), []byte("Jc"), []byte("Jd"), []byte("5d")}, // two pair
@@ -115,7 +140,7 @@ var dataRiverboat1 = [][][]byte{
 	{[]byte("As"), []byte("Ks"), []byte("Qs"), []byte("Js"), []byte("Ts")}, // straight flush
 }
 
-var dataRiverboat2 = [][][]byte{
+var dataRiverboat6 = [][][]byte{
 	{[]byte("3d"), []byte("As"), []byte("Ks"), []byte("Jc"), []byte("7h"), []byte("5d")}, // high card
 	{[]byte("3d"), []byte("As"), []byte("Ac"), []byte("Jc"), []byte("7h"), []byte("5d")}, // pair
 	{[]byte("3d"), []byte("As"), []byte("Ac"), []byte("Jc"), []byte("Jd"), []byte("5d")}, // two pair
@@ -127,7 +152,7 @@ var dataRiverboat2 = [][][]byte{
 	{[]byte("3d"), []byte("As"), []byte("Ks"), []byte("Qs"), []byte("Js"), []byte("Ts")}, // straight flush
 }
 
-var dataRiverboat3 = [][][]byte{
+var dataRiverboat7 = [][][]byte{
 	{[]byte("2d"), []byte("3d"), []byte("As"), []byte("Ks"), []byte("Jc"), []byte("7h"), []byte("5d")}, // high card
 	{[]byte("2d"), []byte("3d"), []byte("As"), []byte("Ac"), []byte("Jc"), []byte("7h"), []byte("5d")}, // pair
 	{[]byte("2d"), []byte("3d"), []byte("As"), []byte("Ac"), []byte("Jc"), []byte("Jd"), []byte("5d")}, // two pair
@@ -139,115 +164,164 @@ var dataRiverboat3 = [][][]byte{
 	{[]byte("2d"), []byte("3d"), []byte("As"), []byte("Ks"), []byte("Qs"), []byte("Js"), []byte("Ts")}, // straight flush
 }
 
-func BenchmarkFivePoker(b *testing.B) {
-	var cardsPoker1 [][]poker.Card
-	for score := range dataPoker1 {
-		var cards []poker.Card
-
-		json.Unmarshal([]byte(dataPoker1[score]), &cards)
-		cardsPoker1 = append(cardsPoker1, cards)
-	}
-
-	b.ResetTimer()
-
-	for i := 0; i < b.N; i++ {
-		for _, cards := range cardsPoker1 {
-			poker.Evaluate(cards)
-		}
-	}
-}
-
 func BenchmarkFiveJoker(b *testing.B) {
-
-	var cardsJoker1 [][]hand.Card
-	for score := range dataJoker1 {
+	var cardsJoker5 [][]hand.Card
+	for score := range dataJoker5 {
 		var cards []hand.Card
-
-		json.Unmarshal([]byte(dataJoker1[score]), &cards)
-		cardsJoker1 = append(cardsJoker1, cards)
+		json.Unmarshal([]byte(dataJoker5[score]), &cards)
+		cardsJoker5 = append(cardsJoker5, cards)
 	}
 
 	b.ResetTimer()
 
 	for i := 0; i < b.N; i++ {
-		for _, cards := range cardsJoker1 {
+		for _, cards := range cardsJoker5 {
 			hand.New(cards)
 		}
 	}
 }
 
-func BenchmarkFiveRiverboat(b *testing.B) {
-	var cardsRiverboat1 [][]Card
-
-	for _, s := range dataRiverboat1 {
-		var cards []Card
-
-		for _, ss := range s {
-			c := ParseCardStr(ss)
-			cards = append(cards, c)
-		}
-
-		cardsRiverboat1 = append(cardsRiverboat1, cards)
+func BenchmarkFivePoker(b *testing.B) {
+	var cardsPoker5 [][]poker.Card
+	for score := range dataPoker5 {
+		var cards []poker.Card
+		json.Unmarshal([]byte(dataPoker5[score]), &cards)
+		cardsPoker5 = append(cardsPoker5, cards)
 	}
 
 	b.ResetTimer()
 
 	for i := 0; i < b.N; i++ {
-		for _, cards := range cardsRiverboat1 {
+		for _, cards := range cardsPoker5 {
+			poker.Evaluate(cards)
+		}
+	}
+}
+
+func BenchmarkFiveRiverboat(b *testing.B) {
+	var cardsRiverboat5 [][]Card
+	for _, s := range dataRiverboat5 {
+		var cards []Card
+		for _, ss := range s {
+			c := ParseCardStr(ss)
+			cards = append(cards, c)
+		}
+		cardsRiverboat5 = append(cardsRiverboat5, cards)
+	}
+
+	b.ResetTimer()
+
+	for i := 0; i < b.N; i++ {
+		for _, cards := range cardsRiverboat5 {
 			HandValue(cards[0], cards[1], cards[2], cards[3], cards[4])
 		}
 	}
 }
 
-// func BenchmarkSixPoker(b *testing.B) {
-// 	for i := 0; i < b.N; i++ {
-// 		for _, cards := range cardsPoker2 {
-// 			poker.Evaluate(cards)
-// 		}
-// 	}
-// }
+func BenchmarkSixJoker(b *testing.B) {
+	var cardsJoker6 [][]hand.Card
+	for score := range dataJoker6 {
+		var cards []hand.Card
+		json.Unmarshal([]byte(dataJoker6[score]), &cards)
+		cardsJoker6 = append(cardsJoker6, cards)
+	}
 
-// func BenchmarkSixJoker(b *testing.B) {
+	b.ResetTimer()
 
-// 	for i := 0; i < b.N; i++ {
-// 		for _, cards := range cardsJoker2 {
-// 			hand.New(cards)
-// 		}
-// 	}
-// }
+	for i := 0; i < b.N; i++ {
+		for _, cards := range cardsJoker6 {
+			hand.New(cards)
+		}
+	}
+}
 
-// func BenchmarkSixRiverboat(b *testing.B) {
+func BenchmarkSixPoker(b *testing.B) {
+	var cardsPoker6 [][]poker.Card
+	for score := range dataPoker6 {
+		var cards []poker.Card
+		json.Unmarshal([]byte(dataPoker6[score]), &cards)
+		cardsPoker6 = append(cardsPoker6, cards)
+	}
 
-// 	for i := 0; i < b.N; i++ {
-// 		for _, cards := range cardsRiverboat3 {
-// 			BestFiveOfSix(cards[0], cards[1], cards[2], cards[3], cards[4], cards[5])
-// 		}
-// 	}
-// }
+	b.ResetTimer()
 
-// func BenchmarkSevenPoker(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		for _, cards := range cardsPoker6 {
+			poker.Evaluate(cards)
+		}
+	}
+}
 
-// 	for i := 0; i < b.N; i++ {
-// 		for _, cards := range cardsPoker3 {
-// 			poker.Evaluate(cards)
-// 		}
-// 	}
-// }
+func BenchmarkSixRiverboat(b *testing.B) {
+	var cardsRiverboat6 [][]Card
+	for _, s := range dataRiverboat6 {
+		var cards []Card
+		for _, ss := range s {
+			c := ParseCardStr(ss)
+			cards = append(cards, c)
+		}
+		cardsRiverboat6 = append(cardsRiverboat6, cards)
+	}
 
-// func BenchmarkSevenJoker(b *testing.B) {
+	b.ResetTimer()
 
-// 	for i := 0; i < b.N; i++ {
-// 		for _, cards := range cardsJoker3 {
-// 			hand.New(cards)
-// 		}
-// 	}
-// }
+	for i := 0; i < b.N; i++ {
+		for _, cards := range cardsRiverboat6 {
+			BestFiveOfSix(cards[0], cards[1], cards[2], cards[3], cards[4], cards[5])
+		}
+	}
+}
 
-// func BenchmarkSevenRiverboat(b *testing.B) {
+func BenchmarkSevenJoker(b *testing.B) {
+	var cardsJoker7 [][]hand.Card
+	for score := range dataJoker7 {
+		var cards []hand.Card
+		json.Unmarshal([]byte(dataJoker7[score]), &cards)
+		cardsJoker7 = append(cardsJoker7, cards)
+	}
 
-// 	for i := 0; i < b.N; i++ {
-// 		for _, cards := range cardsRiverboat3 {
-// 			BestFiveOfSeven(cards[0], cards[1], cards[2], cards[3], cards[4], cards[5], cards[6])
-// 		}
-// 	}
-// }
+	b.ResetTimer()
+
+	for i := 0; i < b.N; i++ {
+		for _, cards := range cardsJoker7 {
+			hand.New(cards)
+		}
+	}
+}
+
+func BenchmarkSevenPoker(b *testing.B) {
+	var cardsPoker7 [][]poker.Card
+	for score := range dataPoker7 {
+		var cards []poker.Card
+		json.Unmarshal([]byte(dataPoker7[score]), &cards)
+		cardsPoker7 = append(cardsPoker7, cards)
+	}
+
+	b.ResetTimer()
+
+	for i := 0; i < b.N; i++ {
+		for _, cards := range cardsPoker7 {
+			poker.Evaluate(cards)
+		}
+	}
+}
+
+func BenchmarkSevenRiverboat(b *testing.B) {
+	var cardsRiverboat7 [][]Card
+	for _, s := range dataRiverboat7 {
+		var cards []Card
+		for _, ss := range s {
+			c := ParseCardStr(ss)
+			cards = append(cards, c)
+		}
+		cardsRiverboat7 = append(cardsRiverboat7, cards)
+	}
+
+	b.ResetTimer()
+
+	for i := 0; i < b.N; i++ {
+		for _, cards := range cardsRiverboat7 {
+			BestFiveOfSeven(cards[0], cards[1], cards[2], cards[3], cards[4], cards[5], cards[6])
+		}
+	}
+}
