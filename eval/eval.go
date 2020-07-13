@@ -114,41 +114,45 @@ func HandValue(c0, c1, c2, c3, c4 Card) int {
 }
 
 //BestFiveOfSeven is a wrapper that uses HandValue as an oracle to non-deterministically find the best 5 card hand out of 7
-func BestFiveOfSeven(c1, c2, c3, c4, c5, c6, c7 Card) ([]Card, int) {
-	base := []Card{c1, c2, c3, c4, c5, c6, c7}
+func BestFiveOfSeven(c0, c1, c2, c3, c4, c5, c6 Card) ([]Card, int) {
+	base := []Card{c0, c1, c2, c3, c4, c5, c6}
 	var bestHand []Card
-	var bestScore int = 8000 // larger value than the worst hand, so the first real hand will always be better
-	for ndx1 := range base {
-		six := make([]Card, 6)
-		copy(six, base[:ndx1])
-		six = append(six[:ndx1], base[ndx1+1:]...)
-		hand, score := BestFiveOfSix(six[0], six[1], six[2], six[3], six[4], six[5])
+	bestScore := 8000 // larger value than the worst hand, so the first real hand will always be better
+	for ndx := range base {
+		hand, score := BestFiveOfSix(
+			base[ndx], 
+			base[(ndx + 1) % 7], 
+			base[(ndx + 2) % 7], 
+			base[(ndx + 3) % 7], 
+			base[(ndx + 4) % 7],
+			base[(ndx + 5) % 7],
+		)
 		if score < bestScore {
 			bestScore = score
 			bestHand = hand
 		}
 	}
-
 	return bestHand, bestScore
-
 }
 
-func BestFiveOfSix(c1, c2, c3, c4, c5, c6 Card) ([]Card, int) {
-	base := []Card{c1, c2, c3, c4, c5, c6}
-	bestHand := []Card{}
+func BestFiveOfSix(c0, c1, c2, c3, c4, c5 Card) ([]Card, int) {
+	base := []Card{c0, c1, c2, c3, c4, c5}
+	bestNdx := 0
 	bestScore := 8000 // larger value than the worst hand, so the first real hand will always be better
 	for ndx := range base {
-		five := make([]Card, 5)
-		copy(five, base[:ndx])
-		five = append(five[:ndx], base[ndx+1:]...)
-		score := HandValue(five[0], five[1], five[2], five[3], five[4])
+		score := HandValue(
+			base[ndx], 
+			base[(ndx + 1) % 6], 
+			base[(ndx + 2) % 6], 
+			base[(ndx + 3) % 6], 
+			base[(ndx + 4) % 6],
+		)
 		if score < bestScore {
 			bestScore = score
-			bestHand = []Card{five[0], five[1], five[2], five[3], five[4]}
+			bestNdx = ndx
 		}
 	}
-
-	return bestHand, bestScore
+	return []Card{base[bestNdx], base[(bestNdx + 1) % 6],  base[(bestNdx + 2) % 6],  base[(bestNdx + 3) % 6],  base[(bestNdx + 4) % 6],}, bestScore
 }
 
 var primeRanks = [13]int32{2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41}
