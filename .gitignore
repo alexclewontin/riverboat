@@ -1,3 +1,5 @@
 benchmark_results.txt
 .vscode/
-.rej
+*.rej
+profile.out
+*.test
