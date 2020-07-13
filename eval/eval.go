@@ -1,4 +1,4 @@
-//* Copyright (c) 2020, AUTHOR, Alex Lewontin
+//* Copyright (c) 2020, Alex Lewontin
 //* All rights reserved.
 //* 
 //* Redistribution and use in source and binary forms, with or without
@@ -31,20 +31,16 @@ package eval
 
 import (
 	"bytes"
-
 	//"log"
 )
 
 var hashes *chdPoker
-
 
 //go:generate go run ./cmd/buildhashtable/buildhashtable.go
 func init() {
 	r := bytes.NewReader(matched_card_hashes)
 	hashes, _ = read(r)
 }
-
-
 
 type Card int32
 
@@ -63,14 +59,16 @@ func ParseCardStr(c []byte) Card {
 	var rank int32
 	var suit int32
 	var rankPrime int32
-	switch(len(c)) {
+	switch len(c) {
 	case 2:
 		rank = chrRanks[upc[0]]
 		suit = chrSuits[upc[1]]
 		rankPrime = primeRanks[rank]
 
 	case 3:
-		if string(upc)[0:2] != "10" { return Card(0) }
+		if string(upc)[0:2] != "10" {
+			return Card(0)
+		}
 		rank = chrRanks['T']
 		suit = chrSuits[upc[2]]
 		rankPrime = primeRanks[rank]
@@ -2348,4 +2346,3 @@ var unique = []int16{
 // 	0xd7, 0x15, 0x12, 0x13, 0x01, 0x18, 0x30, 0x17, 0x9d, 0x0a, 0xda, 0x11,
 // 	0xe2, 0x15, 0x11, 0x10, 0xc9, 0x07, 0x20, 0x17,
 // }
-

@@ -1,4 +1,4 @@
-//* Copyright (c) 2020, AUTHOR, Alex Lewontin
+//* Copyright (c) 2020, Alex Lewontin
 //* All rights reserved.
 //* 
 //* Redistribution and use in source and binary forms, with or without
@@ -30,7 +30,6 @@ import (
 	"github.com/chehsunliu/poker"
 	"github.com/notnil/joker/hand"
 )
-
 
 var dataPoker1 = map[int32]string{
 	6252: `["As", "Ks", "Jc", "7h", "5d"]`, // high card

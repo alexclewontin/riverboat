@@ -1,4 +1,4 @@
-//* Copyright (c) 2020, AUTHOR, Alex Lewontin
+//* Copyright (c) 2020, Alex Lewontin
 //* All rights reserved.
 //* 
 //* Redistribution and use in source and binary forms, with or without
@@ -21,34 +21,34 @@
 //* OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 //* OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-//* This file incorporates modified work from https://github.com/alecthomas/mph 
-//* covered by the following license: 
+//* This file incorporates modified work from https://github.com/alecthomas/mph
+//* covered by the following license:
 
-	//* Copyright (c) 2014, Alec Thomas
-	//* All rights reserved.
-	//* 
-	//* Redistribution and use in source and binary forms, with or without
-	//* modification, are permitted provided that the following conditions are met:
-	//* 
-	//* - Redistributions of source code must retain the above copyright notice, this
-	//* list of conditions and the following disclaimer.
-	//* - Redistributions in binary form must reproduce the above copyright notice,
-	//* this list of conditions and the following disclaimer in the documentation
-	//* and/or other materials provided with the distribution.
-	//* - Neither the name of SwapOff.org nor the names of its contributors may
-	//* be used to endorse or promote products derived from this software without
-	//* specific prior written permission.
-	//* 
-	//* THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
-	//* ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
-	//* WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-	//* DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-	//* FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-	//* DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-	//* SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-	//* CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-	//* OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-	//* OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//* Copyright (c) 2014, Alec Thomas
+//* All rights reserved.
+//*
+//* Redistribution and use in source and binary forms, with or without
+//* modification, are permitted provided that the following conditions are met:
+//*
+//* - Redistributions of source code must retain the above copyright notice, this
+//* list of conditions and the following disclaimer.
+//* - Redistributions in binary form must reproduce the above copyright notice,
+//* this list of conditions and the following disclaimer in the documentation
+//* and/or other materials provided with the distribution.
+//* - Neither the name of SwapOff.org nor the names of its contributors may
+//* be used to endorse or promote products derived from this software without
+//* specific prior written permission.
+//*
+//* THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+//* ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+//* WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+//* DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+//* FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+//* DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+//* SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+//* CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+//* OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+//* OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 // * This file incorporates data used by Cactus Kev's Poker Hand Evaluator Algorithm
 // * (http://suffe.cool/poker/evaluator.html) as well as Paul Senzee's improvement on it
@@ -70,7 +70,6 @@ import (
 	"text/template"
 	"time"
 )
-
 
 func main() {
 	var best *CHDPoker
@@ -98,7 +97,7 @@ func main() {
 
 	//w, err := os.Create("matched_card_hashes.idx")
 	buf := bytes.Buffer{}
-	w := bufio.NewWriterSize(&buf, (4888 * 2) + (2444 * 2) + (len(best.r) * 8))
+	w := bufio.NewWriterSize(&buf, (4888*2)+(2444*2)+(len(best.r)*8))
 
 	if err != nil {
 		fmt.Println(err)
@@ -116,7 +115,6 @@ func main() {
 		}
 		lit = lit + fmt.Sprintf("0x%s, ", hex.EncodeToString([]byte{b}))
 	}
-
 
 	f, err := os.Create("matched_card_hashes.go")
 	if err != nil {
@@ -224,7 +222,7 @@ func (c *CHDPoker) Write(w io.Writer) error {
 	// data := []interface{}{
 	// 	uint32(len(c.r)), c.r,
 	// 	uint32(len(c.indices)), c.indices,
-	// 	uint32(len(c.values)), 
+	// 	uint32(len(c.values)),
 	// }
 
 	// if err := write(data...); err != nil {

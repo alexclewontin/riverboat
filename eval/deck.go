@@ -1,4 +1,4 @@
-//* Copyright (c) 2020, AUTHOR, Alex Lewontin
+//* Copyright (c) 2020, Alex Lewontin
 //* All rights reserved.
 //* 
 //* Redistribution and use in source and binary forms, with or without
