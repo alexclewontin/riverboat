@@ -1,5 +1,7 @@
 # Riverboat
 
+![Go](https://github.com/alexclewontin/riverboat/workflows/Go/badge.svg)
+
 A full-service Go Texas hold'em library, featuring an ultra-fast poker hand evaluation module.
 
 ![Str. Toronto, a riverboat that was not a casino, on the St. Lawrence River](https://cdn.loc.gov/service/pnp/det/4a30000/4a31000/4a31700/4a31769v.jpg)
