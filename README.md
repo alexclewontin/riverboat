@@ -2,18 +2,20 @@
 
 A full-service Go Texas hold'em library, featuring an ultra-fast poker hand evaluation module.
 
----
+![Str. Toronto, a riverboat that was not a casino, on the St. Lawrence River](https://cdn.loc.gov/service/pnp/det/4a30000/4a31000/4a31700/4a31769v.jpg)
 
-## Table of Contents (Optional)
+
+## Table of Contents
 
 - [Riverboat](#riverboat)
-  - [Table of Contents (Optional)](#table-of-contents-optional)
+  - [Table of Contents](#table-of-contents)
   - [Features](#features)
   - [How-To](#how-to)
     - [Installation](#installation)
     - [Usage](#usage)
   - [Documentation](#documentation)
   - [Contributing](#contributing)
+  - [Acknowledgements](#acknowledgements)
   - [License](#license)
 
 ## Features
@@ -57,14 +59,39 @@ Create a game:
     g := riverboat.NewGame()
 ```
 
-Add players and buy-in:
+Add players, buy-in, ready up:
 ```go
-    pNum1 := g.AddPlayer()
-    pNum2 := g.AddPlayer()
+    pNum := g.AddPlayer()
 
-    riverboat.BuyIn(g, pNum1, 1000)
+    err = riverboat.BuyIn(g, pNum, 1000)
+    if err != nil {
+        fmt.Println(err)
+    }
+
+    err = riverboat.ToggleReady(g, pNum, 0)
+    // ... check for error
 ```
 
+Play:
+
+```go
+    err = riverboat.Deal(g, pNum, 0)
+    // ... check for error
+    err = riverboat.Bet(g, pNum, 25)
+    // ... check for error
+    err = riverboat.Fold(g, pNum, 0)
+    // ... check for error
+```
+
+Inspect the game's state:
+
+```go
+    // This doesn't contain opponents' cards, or the contents of the deck
+    playerView := g.GenerateView(pNum)
+
+    // This is the entire game state, for easy serialization and storage in a persistence layer
+    godView := g.GenerateOmniView(pNum)
+```
 ## Documentation
 
 Full documentation can be found [here](https://pkg.go.dev/github.com/alexclewontin/riverboat) (TODO: flesh this out).
@@ -75,6 +102,10 @@ Contributions to Riverboat are more than welcome!
 
 - If the contribution is a minor fix, go ahead and open a PR.
 - If the contribution is larger (e.g. supporting an additional ruleset or variation like Omaha or limit hold'em) open an issue to coordinate development efforts.
+
+## Acknowledgements
+
+TODO: Acknowledgements
 
 ## License
 
