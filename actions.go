@@ -261,7 +261,9 @@ func ToggleReady(g *Game, pn uint, data uint) error {
 		}
 	}
 
-	g.updateBlindNums()
+	if g.getStage() == PreDeal {
+		g.updateBlindNums()
+	}
 
 	return nil
 }
