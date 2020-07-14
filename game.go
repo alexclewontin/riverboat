@@ -130,11 +130,8 @@ func (g *Game) setStageAndBetting(s GameStage, b bool) {
 	g.setBetting(b)
 }
 
-func (g *Game) getPlayer(pn uint) (*player, error) {
-	if pn >= uint(len(g.players)) {
-		return nil, ErrBadPlayerNum
-	}
-	return &g.players[pn], nil
+func (g *Game) getPlayer(pn uint) *player {
+	return &g.players[pn]
 }
 
 func (g *Game) readyCount() uint {
@@ -413,7 +410,7 @@ func (g *Game) updateRoundInfo() {
 	} else {
 		g.setBetting(false)
 	}
-	return nil
+	return
 
 }
 

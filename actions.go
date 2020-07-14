@@ -83,7 +83,9 @@ func Bet(g *Game, pn uint, data uint) error {
 		return ErrIllegalAction
 	}
 
-	return g.updateRoundInfo()
+	g.updateRoundInfo()
+
+	return nil
 }
 
 // BuyIn buys more chips for the player. Here, data is the amount to buy in for
@@ -200,7 +202,9 @@ func Fold(g *Game, pn uint, data uint) error {
 
 	p.In = false
 
-	return g.updateRoundInfo()
+	g.updateRoundInfo()
+
+	return nil
 
 }
 
