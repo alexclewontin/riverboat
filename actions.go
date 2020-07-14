@@ -39,10 +39,7 @@ func Bet(g *Game, pn uint, data uint) error {
 		return ErrIllegalAction
 	}
 
-	p, err := g.getPlayer(pn)
-	if err != nil {
-		return err
-	}
+	p := g.getPlayer(pn)
 
 	//rename this for readability
 	betVal := data
@@ -93,10 +90,7 @@ func BuyIn(g *Game, pn uint, data uint) error {
 	g.mtx.Lock()
 	defer g.mtx.Unlock()
 
-	p, err := g.getPlayer(pn)
-	if err != nil {
-		return err
-	}
+	p := g.getPlayer(pn)
 
 	//Can't buy in while playing
 	if p.In {
@@ -191,10 +185,7 @@ func Fold(g *Game, pn uint, data uint) error {
 	g.mtx.Lock()
 	defer g.mtx.Unlock()
 
-	p, err := g.getPlayer(pn)
-	if err != nil {
-		return err
-	}
+	p := g.getPlayer(pn)
 
 	if g.actionNum != pn {
 		return ErrIllegalAction
@@ -212,10 +203,7 @@ func ToggleReady(g *Game, pn uint, data uint) error {
 	g.mtx.Lock()
 	defer g.mtx.Unlock()
 
-	p, err := g.getPlayer(pn)
-	if err != nil {
-		return err
-	}
+	p := g.getPlayer(pn)
 
 	if p.In {
 		return ErrIllegalAction
