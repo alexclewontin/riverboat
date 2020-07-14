@@ -17,7 +17,6 @@ A full-service Go Texas hold'em library, featuring an ultra-fast poker hand eval
     - [Usage](#usage)
   - [Documentation](#documentation)
   - [Contributing](#contributing)
-  - [Acknowledgements](#acknowledgements)
   - [License](#license)
 
 ## Features
@@ -105,10 +104,6 @@ Contributions to Riverboat are more than welcome!
 
 - If the contribution is a minor fix, go ahead and open a PR.
 - If the contribution is larger (e.g. supporting an additional ruleset or variation like Omaha or limit hold'em) open an issue to coordinate development efforts.
-
-## Acknowledgements
-
-TODO: Acknowledgements
 
 ## License
 
