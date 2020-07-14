@@ -46,38 +46,46 @@ type GameView struct {
 }
 
 func (g *Game) copyToView() *GameView {
-	//TODO: Is there some way to do this programatically? I considered using 
+	//TODO: Is there some way to do this programatically? I considered using
 	// reflection, but since that happens at runtime it is less performant.
 	// Something like reflection, but evaulated at compile-time would be ideal
 	// Probably using go generate.
 
-	//WARNING: This needs to be the deepest of deep copies. If adding a field, 
+	//WARNING: This needs to be the deepest of deep copies. If adding a field,
 	//make sure that it is. An example: copying a slice of structs, where the struct
 	//has a field that is a slice: this doesn't work by default. Write a helper function.
 	view := &GameView{
-		DealerNum: g.dealerNum,
-		ActionNum: g.actionNum,
-		UTGNum: g.utgNum,
-		SBNum: g.sbNum,
-		BBNum: g.bbNum,
+		DealerNum:      g.dealerNum,
+		ActionNum:      g.actionNum,
+		UTGNum:         g.utgNum,
+		SBNum:          g.sbNum,
+		BBNum:          g.bbNum,
 		CommunityCards: append([]Card{}, g.communityCards...),
-		Flags: g.flags,
-
-		//TODO: is this necessary?
-		Config: GameConfig{
-			MaxBuy: g.config.MaxBuy,
-			BigBlind: g.config.BigBlind,
-			SmallBlind: g.config.SmallBlind,
-		},
-		Players: append([]player{}, g.players...),
-		Deck: append([]Card{}, g.deck...),
-		//TODO: I can already tell that this is broken
-		Pots: append([]Pot{}, g.pots...),
-		MinRaise: g.minRaise,
-		ReadyCount: g.readyCount(),
+		Stage:          g.getStage(),
+		Betting:        g.getBetting(),
+		Config:         g.config,
+		Players:        append([]player{}, g.players...),
+		Deck:           append([]Card{}, g.deck...),
+		Pots:           copyPots(g.pots),
+		MinRaise:       g.minRaise,
+		ReadyCount:     g.readyCount(),
 	}
 
 	return view
+}
+
+func copyPots(src []Pot) []Pot {
+	ret := make([]Pot, len(src))
+	for i := range src {
+		ret[i].Amt = src[i].Amt
+		ret[i].TopShare = src[i].TopShare
+		ret[i].WinningScore = src[i].WinningScore
+		ret[i].EligblePlayerNums = append([]uint{}, src[i].EligblePlayerNums...)
+		ret[i].WinningPlayerNums = append([]uint{}, src[i].WinningPlayerNums...)
+		ret[i].WinningHand = append([]Card{}, src[i].WinningHand...)
+	}
+
+	return ret
 }
 
 // FillFromView is primarily for loading a stored view from a persistence layer
@@ -95,9 +103,7 @@ func (g *Game) FillFromView(gv *GameView) {
 	g.config = gv.Config
 	g.players = append([]player{}, gv.Players...)
 	g.deck = append([]Card{}, gv.Deck...)
-
-	//TODO: I can already tell that this is broken
-	g.pots = append([]Pot{}, g.pots...)
+	g.pots = copyPots(gv.Pots)
 	g.minRaise = gv.MinRaise
 }
 
@@ -111,7 +117,7 @@ func (g *Game) GeneratePlayerView(pn uint) *GameView {
 	gv.Deck = nil
 
 	// D. R. Y.!
-	hideCards := func(pn2 uint) { gv.Players[pn2].Cards = [2]Card{ 0, 0 } }
+	hideCards := func(pn2 uint) { gv.Players[pn2].Cards = [2]Card{0, 0} }
 	showCards := func(pn2 uint) { gv.Players[pn2].Cards = [2]Card{g.players[pn2].Cards[0], g.players[pn2].Cards[1]} }
 
 	allInCount := 0
