@@ -440,7 +440,7 @@ func NewGame() *Game {
 	return &newGame
 }
 
-func AddPlayer(g *Game) uint {
+func (g *Game) AddPlayer() uint {
 	g.players = append(g.players, player{})
 	g.players[len(g.players)-1].initialize()
 	return uint(len(g.players) - 1)
