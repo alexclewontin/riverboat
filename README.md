@@ -2,7 +2,7 @@
 
 ![Go](https://github.com/alexclewontin/riverboat/workflows/Go/badge.svg)
 
-A full-service Go Texas hold'em library, featuring an ultra-fast poker hand evaluation module.
+A full-service Go Texas hold'em library, featuring an ultra-fast poker hand evaluation module. Designed specifically to be integrated with whichever communications protocol and persistence layer you desire.
 
 ![Str. Toronto, a riverboat that was not a casino, on the St. Lawrence River](https://cdn.loc.gov/service/pnp/det/4a30000/4a31000/4a31700/4a31769v.jpg)
 
@@ -28,8 +28,8 @@ Riverboat plays No-limit Texas Hold'em. It's a full-service game-management libr
 - **Information hiding** - calculates exactly what any player can see at any moment, including edge cases like when all players are all-in
 - **Winner determination and pot allocation** - correctly allocates pots at the end, including arbitrary numbers of sidepots and splits
 - **Configurable** - buy-in limits and blinds can be set on a game-by-game basis
-
-Riverboat also includes an evaluation submodule, which as of July 2020 is the *[fastest](./eval#benchmarks)* 5-, 6-, and 7-card poker hand evaluator in Go on Github.
+- **Broadly compatible** - compatible with standard library interfaces, and designed for easy custom serialization to allow easy integration with any stack you use
+- **Blazing fast** - includes an evaluation submodule, which as of July 2020 is the *[fastest](./eval#benchmarks)* 5-, 6-, and 7-card poker hand evaluator in Go on Github.
 
 
 ## How-To
@@ -92,8 +92,9 @@ Inspect the game's state:
     playerView := g.GenerateView(pNum)
 
     // This is the entire game state, for easy serialization and storage in a persistence layer
-    godView := g.GenerateOmniView(pNum)
+    godView := g.GenerateOmniView()
 ```
+
 ## Documentation
 
 Full documentation can be found [here](https://pkg.go.dev/github.com/alexclewontin/riverboat) (TODO: flesh this out).
