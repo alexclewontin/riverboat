@@ -35,7 +35,8 @@ type GameView struct {
 	SBNum          uint
 	BBNum          uint
 	CommunityCards []Card
-	Flags          GameFlags
+	Stage          GameStage
+	Betting        bool
 	Config         GameConfig
 	Players        []player
 	Deck           Deck
@@ -90,15 +91,8 @@ func (g *Game) FillFromView(gv *GameView) {
 	g.bbNum = gv.BBNum
 	g.sbNum = gv.SBNum
 	g.communityCards = append([]Card{}, gv.CommunityCards...)
-	g.flags = gv.Flags
-
-	//TODO: is this necessary?
-	g.config = GameConfig{
-		MaxBuy: gv.Config.MaxBuy,
-		BigBlind: gv.Config.BigBlind,
-		SmallBlind: gv.Config.SmallBlind,
-	}
-
+	g.setStageAndBetting(gv.Stage, gv.Betting)
+	g.config = gv.Config
 	g.players = append([]player{}, gv.Players...)
 	g.deck = append([]Card{}, gv.Deck...)
 
@@ -147,7 +141,7 @@ func (g *Game) GeneratePlayerView(pn uint) *GameView {
 		}
 	}
 
-	if g.getStage() == Over {
+	if g.getStage() == PreDeal {
 		for _, pot := range g.pots {
 			//TODO: technically, this should start with the called player and go around.
 			// For the moment, we're just gonna show the winners

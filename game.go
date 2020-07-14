@@ -31,13 +31,13 @@ import (
 	. "github.com/alexclewontin/riverboat/eval"
 )
 
-// MaxSeats: I mean, if you really want to...
-const MaxPlayers = 23
+// (52 - 5) / 2. I mean, if you really want to...
+const maxPlayers = 23
 
 // Heads up!
-const MinPlayers = 2
+const minPlayers = 2
 
-type GameFlags uint8
+type gameFlags uint8
 
 /*
 xxxxBSSS
@@ -51,7 +51,6 @@ SSS - Status
 	011 : Flop
 	100 : Turn
 	101 : River
-	110 : Over
 
 B - Betting
 	1 :Yes, still betting
@@ -66,7 +65,6 @@ const (
 	Flop
 	Turn
 	River
-	Over
 )
 
 type Pot struct {
@@ -96,7 +94,7 @@ type Game struct {
 	sbNum          uint
 	bbNum          uint
 	communityCards []Card
-	flags          GameFlags
+	flags          gameFlags
 	config         GameConfig
 	players        []player
 	deck           Deck
@@ -117,14 +115,14 @@ func (g *Game) getStageAndBetting() (GameStage, bool) {
 }
 
 func (g *Game) setStage(s GameStage) {
-	g.flags = GameFlags((uint8(g.flags) & 0xF8) | uint8(s))
+	g.flags = gameFlags((uint8(g.flags) & 0xF8) | uint8(s))
 }
 
 func (g *Game) setBetting(b bool) {
 	if b {
-		g.flags = GameFlags(uint8(g.flags) | 0x08)
+		g.flags = gameFlags(uint8(g.flags) | 0x08)
 	} else {
-		g.flags = GameFlags(uint8(g.flags) & 0xF7)
+		g.flags = gameFlags(uint8(g.flags) & 0xF7)
 	}
 }
 
@@ -418,11 +416,26 @@ func (g *Game) updateRoundInfo() {
 
 //Exported functions related to game management (not "Actions")
 
+// NewGame is a factory method that returns a pointer to an initialized game.
+// This freshly created game will have the following default values:
+// 	Players: []
+// 	GameStage: PreDeal
+// 	Betting: False
+// 	Config: {
+// 		BigBlind:	25
+// 		SmallBlind:	10
+// 		MaxBuy:		0
+// 	}
 func NewGame() *Game {
 	newGame := Game{}
 
-	newGame.flags = 0x01
-	newGame.dealerNum = 0
+	newGame.setStageAndBetting(PreDeal, false)
+	newGame.deck = DefaultDeck
+	newGame.config = GameConfig{
+		BigBlind:   25,
+		SmallBlind: 10,
+		MaxBuy:     0,
+	}
 
 	return &newGame
 }
