@@ -23,10 +23,28 @@
 
 package riverboat
 
-// The generic type of all actions, made to better allow external agents to interact with the game.
-// Data represents different things for different Actions
+// Action is the generic type of all actions, formalized to better allow external agents to interact with the game.
+// For all Actions, g is the game in which it is performed and pn is the player number performing the action.
+// data represents different things for different Actions.
+//
+// If pn is valid, Actions are guaranteed to not modify the internal state of g at all, and return a descriptive
+// error if the attempted action was illegal.
+//
+// Passing an invalid player number to pn will result in undefined behavior,
+// and may cause anything from a segmentation fault to completely silent failure.
+// Invalid player numbers are player numbers that have not been assigned to a player within Game g.
+// Player numbers that have left the game *may* still be valid (but cannot legally perform actions), but
+// that is not guaranteed by the API. Player numbers are generally meant as an internal identifier,
+// and in most applications will be mapped to some other identifier (like a client session id), so
+// it intentionally does not perform checks on the values it is passed to
+// optimize performance. If you intend to pass Actions player numbers directly from an external source
+// it is your responsibility to ensure the integrity of those numbers.
 type Action func(g *Game, pn uint, data uint) error
 
+// Bet is the Action that covers checking, opening betting, calling, and raising.
+// For Bet, data is the amount of the bet (with a check being 0). If Bet is called out of turn, or
+// the value passed to data does not constitute a legal bet, Bet will return an error value. If bet is successful,
+// it will return nil.
 func Bet(g *Game, pn uint, data uint) error {
 	g.mtx.Lock()
 	defer g.mtx.Unlock()
@@ -85,7 +103,9 @@ func Bet(g *Game, pn uint, data uint) error {
 	return nil
 }
 
-// BuyIn buys more chips for the player. Here, data is the amount to buy in for
+// BuyIn buys more chips for the player. For BuyIn, data is the amount to buy in for.
+// BuyIn will return an error if the player attempting it is in the current round, or if
+// the buy would cause the player's stack to exceed the maximum configured buy in.
 func BuyIn(g *Game, pn uint, data uint) error {
 	g.mtx.Lock()
 	defer g.mtx.Unlock()
@@ -111,6 +131,12 @@ func BuyIn(g *Game, pn uint, data uint) error {
 	return nil
 }
 
+// Deal deals the next set of cards, as appropriate per g's internal state. If g is currently betting,
+// or pn is not the dealer, Deal will return an error. Otherwise, if g is stage PreDeal when Deal is called,
+// Deal shuffles the deck and deals each player who is ready 2 cards. If g is stage PreFlop, Deal deals the flop; if g
+// is stage Flop, Deal deals the turn, and if g is stage Turn, Deal deals the river. g is never stage River and not betting,
+// so calling Deal during stage River will result in an error.
+// Deal ignores the value passed in as data.
 func Deal(g *Game, pn uint, data uint) error {
 	g.mtx.Lock()
 	defer g.mtx.Unlock()
@@ -181,6 +207,11 @@ func Deal(g *Game, pn uint, data uint) error {
 	return nil
 }
 
+// Fold folds a player's hand. Fold will return an error if
+// the player cannot legally move when it is called. If Fold succeeds, it will update
+// g's internal state as appropriate, including advancing to the next stage of the hand (if all other
+// players have called) or terminating the hand (if after folding, only one other player is in).
+// Fold ignores the value passed in as data
 func Fold(g *Game, pn uint, data uint) error {
 	g.mtx.Lock()
 	defer g.mtx.Unlock()
@@ -199,6 +230,10 @@ func Fold(g *Game, pn uint, data uint) error {
 
 }
 
+// ToggleReady marks a player as "ready" if they are currently "not ready"
+// or "not ready" if they are currently "ready." If the player attempting it is in the current round
+// ToggleReady will return an error. If the player attempting it has no money, ToggleReady will return an error.
+// ToggleReady ignores the value passed in as data.
 func ToggleReady(g *Game, pn uint, data uint) error {
 	g.mtx.Lock()
 	defer g.mtx.Unlock()

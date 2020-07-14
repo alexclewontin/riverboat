@@ -84,6 +84,9 @@ type GameConfig struct {
 	SmallBlind uint
 }
 
+// Game represents a game of poker. It internally keeps track of state, can be mutated by actions,
+// and will generate views of itself upon request. Games should not be initialized directly, only
+// through the NewGame factory function.
 type Game struct {
 	mtx sync.Mutex
 
@@ -148,7 +151,6 @@ func (g *Game) isCalled(pn uint) bool {
 	return g.players[pn].allIn() || (g.players[pn].Bet == g.toCall())
 }
 
-//This function is called for every stage except PreDeal, when the setup works differently
 func (g *Game) initStage() {
 	g.actionNum = (g.dealerNum + 1) % uint(len(g.players))
 	for !g.players[g.actionNum].In {

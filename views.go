@@ -1,15 +1,15 @@
 //* Copyright (c) 2020, Alex Lewontin
 //* All rights reserved.
-//* 
+//*
 //* Redistribution and use in source and binary forms, with or without
 //* modification, are permitted provided that the following conditions are met:
-//* 
+//*
 //* - Redistributions of source code must retain the above copyright notice, this
 //* list of conditions and the following disclaimer.
 //* - Redistributions in binary form must reproduce the above copyright notice,
 //* this list of conditions and the following disclaimer in the documentation
 //* and/or other materials provided with the distribution.
-//* 
+//*
 //* THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
 //* ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 //* WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -27,6 +27,7 @@ import (
 	. "github.com/alexclewontin/riverboat/eval"
 )
 
+// GameView is the type that represents a snapshot of a Game's state.
 type GameView struct {
 	DealerNum      uint
 	ActionNum      uint
@@ -104,30 +105,11 @@ func (g *Game) FillFromView(gv *GameView) {
 	//TODO: I can already tell that this is broken
 	g.pots = append([]Pot{}, g.pots...)
 	g.minRaise = gv.MinRaise
-
-
-
-
-	// ActionNum: g.actionNum,
-	// UTGNum: g.utgNum,
-	// SBNum: g.sbNum,
-	// BBNum: g.bbNum,
-	// CommunityCards: append([]Card{}, g.communityCards...),
-	// Flags: g.flags,
-	// Config: GameConfig{
-	// 	MaxBuy: g.config.MaxBuy,
-	// 	BigBlind: g.config.BigBlind,
-	// 	SmallBlind: g.config.SmallBlind,
-	// },
-	// Players: append([]player{}, g.players...),
-	// Deck: append([]Card{}, g.deck...),
-	// Pots: append([]Pot{}, g.pots...),
-	// MinRaise: g.minRaise,
-	// ReadyCount: g.readyCount(),
-
 }
-// GenerateView is primarily for creating a view that can be serialized for delivery to a specific player
-func (g *Game) GenerateView(pn uint) *GameView {
+
+// GeneratePlayerView is primarily for creating a view that can be serialized for delivery to a specific player
+// The generated view holds only the information that the player denoted by pn is entitled to see at the moment it is generated.
+func (g *Game) GeneratePlayerView(pn uint) *GameView {
 	g.mtx.Lock()
 	defer g.mtx.Unlock()
 
@@ -187,6 +169,3 @@ func (g *Game) GenerateOmniView() *GameView {
 	return g.copyToView()
 
 }
-
-
-
