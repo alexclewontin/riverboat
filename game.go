@@ -1,15 +1,15 @@
 //* Copyright (c) 2020, Alex Lewontin
 //* All rights reserved.
-//* 
+//*
 //* Redistribution and use in source and binary forms, with or without
 //* modification, are permitted provided that the following conditions are met:
-//* 
+//*
 //* - Redistributions of source code must retain the above copyright notice, this
 //* list of conditions and the following disclaimer.
 //* - Redistributions in binary form must reproduce the above copyright notice,
 //* this list of conditions and the following disclaimer in the documentation
 //* and/or other materials provided with the distribution.
-//* 
+//*
 //* THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
 //* ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 //* WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -167,7 +167,7 @@ func (g *Game) initStage() {
 	//TODO: if all or all but one are all-in and its not the end, don't set betting to true on the next deal
 }
 
-//Returns nil if there are more than 2 players ready, ErrNotEnoughPlayers otherwise
+//Returns nil if there are more than 2 players ready, ErrIllegalAction otherwise
 func (g *Game) updateBlindNums() error {
 	readyCount := g.readyCount()
 
@@ -175,7 +175,7 @@ func (g *Game) updateBlindNums() error {
 		g.bbNum = g.dealerNum
 		g.sbNum = g.dealerNum
 		g.utgNum = g.dealerNum
-		return ErrNotEnoughPlayers
+		return ErrIllegalAction
 
 	} else if readyCount == 2 {
 		g.sbNum = g.dealerNum
@@ -247,7 +247,7 @@ func (g *Game) resetForNextHand() {
 	g.setStageAndBetting(PreDeal, false)
 }
 
-func (g *Game) updateRoundInfo() error {
+func (g *Game) updateRoundInfo() {
 
 	var allCalled = true
 	var allInPlayerNums = []uint{}
@@ -274,7 +274,7 @@ func (g *Game) updateRoundInfo() error {
 			g.players[inPlayerNums[0]].Stack += p.TotalBet
 		}
 
-		return nil
+		return
 	}
 
 	// If two or more players are in, but not everybody has called
@@ -284,7 +284,7 @@ func (g *Game) updateRoundInfo() error {
 			g.actionNum = (g.actionNum + 1) % uint(len(g.players))
 		}
 
-		return nil
+		return
 	}
 
 	//If there are two or more players in, and everybody has either called or is all-in, and at this point we determine that only one player is

@@ -32,11 +32,11 @@ func Bet(g *Game, pn uint, data uint) error {
 	defer g.mtx.Unlock()
 
 	if !g.getBetting() {
-		return ErrMidRoundAction
+		return ErrIllegalAction
 	}
 
 	if g.actionNum != pn {
-		return ErrWrongPlayer
+		return ErrIllegalAction
 	}
 
 	p, err := g.getPlayer(pn)
@@ -80,7 +80,7 @@ func Bet(g *Game, pn uint, data uint) error {
 	if !isLegal {
 		//I could just return this in every spot, but i suspect the structure of what is legal
 		//will change as more betting schemes are introduced, so seems more extensible to keep it here
-		return ErrBadBetAmt
+		return ErrIllegalAction
 	}
 
 	return g.updateRoundInfo()
@@ -98,12 +98,12 @@ func BuyIn(g *Game, pn uint, data uint) error {
 
 	//Can't buy in while playing
 	if p.In {
-		return ErrMidRoundAction
+		return ErrIllegalAction
 	}
 
 	//Can't buy more than the maximum buy, if it's configured
 	if g.config.MaxBuy != 0 && p.Stack+data > g.config.MaxBuy {
-		return ErrBuyTooBig
+		return ErrIllegalAction
 	}
 
 	//Otherwise, add it to the stack
@@ -120,13 +120,13 @@ func Deal(g *Game, pn uint, data uint) error {
 	defer g.mtx.Unlock()
 
 	if pn != g.dealerNum {
-		return ErrWrongPlayer
+		return ErrIllegalAction
 	}
 
 	stage, betting := g.getStageAndBetting()
 
 	if betting {
-		return ErrMidRoundAction
+		return ErrIllegalAction
 	}
 
 	g.initStage()
@@ -176,10 +176,8 @@ func Deal(g *Game, pn uint, data uint) error {
 	case Turn:
 		g.communityCards[4] = g.deck.Pop()
 
-	case River:
-		return ErrMidRoundAction
 	default:
-		return ErrInternalBadGameStage
+		return errInternalBadGameStage
 	}
 
 	g.setStageAndBetting(stage+1, true)
@@ -197,7 +195,7 @@ func Fold(g *Game, pn uint, data uint) error {
 	}
 
 	if g.actionNum != pn {
-		return ErrWrongPlayer
+		return ErrIllegalAction
 	}
 
 	p.In = false
@@ -216,7 +214,7 @@ func ToggleReady(g *Game, pn uint, data uint) error {
 	}
 
 	if p.In {
-		return ErrMidRoundAction
+		return ErrIllegalAction
 	}
 
 	if p.Ready {
@@ -225,7 +223,7 @@ func ToggleReady(g *Game, pn uint, data uint) error {
 		p.Cards[1] = 0
 	} else {
 		if p.Stack == 0 {
-			return ErrNoMoney
+			return ErrIllegalAction
 		}
 		p.Ready = true
 	}
