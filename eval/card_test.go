@@ -28,6 +28,112 @@ import (
 	"testing"
 )
 
+func TestParseCardBytes(t *testing.T) {
+	type args struct {
+		c []byte
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    Card
+		wantErr error
+	}{
+		{
+			"Two of Clubs (2C)",
+			args{c: []byte("2C")},
+			98306,
+			nil,
+		},
+		{
+			"Two of Clubs (2c)",
+			args{c: []byte("2c")},
+			98306,
+			nil,
+		},
+		{
+			"Jack of Hearts (JH)",
+			args{c: []byte("JH")},
+			33564957,
+			nil,
+		},
+		{
+			"Jack of Hearts (Jh)",
+			args{c: []byte("Jh")},
+			33564957,
+			nil,
+		},
+		{
+			"Jack of Hearts (jH)",
+			args{c: []byte("jH")},
+			33564957,
+			nil,
+		},
+		{
+			"Jack of Hearts (jh)",
+			args{c: []byte("jh")},
+			33564957,
+			nil,
+		},
+		{
+			"Ten of Spades (10S)",
+			args{c: []byte("10S")},
+			16783383,
+			nil,
+		},
+		{
+			"Ten of Spades (TS)",
+			args{c: []byte("TS")},
+			16783383,
+			nil,
+		},
+		{
+			"Ten of Nonsense (Tx)",
+			args{c: []byte("Tx")},
+			0,
+			ErrBadCard,
+		},
+		{
+			"Ten of Nonsense (10x)",
+			args{c: []byte("10x")},
+			0,
+			ErrBadCard,
+		},
+		{
+			"Nonsense of Spades (xS)",
+			args{c: []byte("xS")},
+			0,
+			ErrBadCard,
+		},
+		{
+			"Nonsense (BC)",
+			args{c: []byte("BC")},
+			0,
+			ErrBadCard,
+		},
+		{
+			"Nonsense (BCD)",
+			args{c: []byte("BCD")},
+			0,
+			ErrBadCard,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := ParseCardBytes(tt.args.c)
+			if got != tt.want {
+				t.Errorf("ParseCardBytes() = %v, want %v", got, tt.want)
+				return
+			}
+
+			if err != tt.wantErr {
+				t.Errorf("ParseCardBytes() error = %v, wantErr = %v", err, tt.wantErr)
+				return
+			}
+
+		})
+	}
+}
+
 func TestDefaultDeck(t *testing.T) {
 
 	t.Run("Len", func(t *testing.T) {

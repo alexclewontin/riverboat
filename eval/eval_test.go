@@ -367,11 +367,11 @@ func TestHandValue(t *testing.T) {
 		testname := fmt.Sprintf("%s", table.description)
 		t.Run(testname, func(t *testing.T) {
 			result := HandValue(
-				ParseCardStr(table.c1),
-				ParseCardStr(table.c2),
-				ParseCardStr(table.c3),
-				ParseCardStr(table.c4),
-				ParseCardStr(table.c5),
+				MustParseCardBytes(table.c1),
+				MustParseCardBytes(table.c2),
+				MustParseCardBytes(table.c3),
+				MustParseCardBytes(table.c4),
+				MustParseCardBytes(table.c5),
 			)
 			if result != table.want {
 				t.Errorf("\nFAIL:\nIn: %s, %s, %s, %s, %s \nWant: %d \nGot: %d \n", table.c1, table.c2, table.c3, table.c4, table.c5, table.want, result)
@@ -468,12 +468,12 @@ func TestBestFiveOfSix(t *testing.T) {
 		t.Run(testname, func(t *testing.T) {
 
 			_, result := BestFiveOfSix(
-				ParseCardStr(table.c1),
-				ParseCardStr(table.c2),
-				ParseCardStr(table.c3),
-				ParseCardStr(table.c4),
-				ParseCardStr(table.c5),
-				ParseCardStr(table.c6),
+				MustParseCardBytes(table.c1),
+				MustParseCardBytes(table.c2),
+				MustParseCardBytes(table.c3),
+				MustParseCardBytes(table.c4),
+				MustParseCardBytes(table.c5),
+				MustParseCardBytes(table.c6),
 			)
 			if result != table.want {
 				t.Errorf("\nFAIL:\nIn: %s, %s, %s, %s, %s, %s \nWant: %d \nGot: %d \n", table.c1, table.c2, table.c3, table.c4, table.c5, table.c6, table.want, result)
@@ -578,82 +578,17 @@ func TestBestFiveOfSeven(t *testing.T) {
 		t.Run(testname, func(t *testing.T) {
 
 			_, result := BestFiveOfSeven(
-				ParseCardStr(table.c1),
-				ParseCardStr(table.c2),
-				ParseCardStr(table.c3),
-				ParseCardStr(table.c4),
-				ParseCardStr(table.c5),
-				ParseCardStr(table.c6),
-				ParseCardStr(table.c7),
+				MustParseCardBytes(table.c1),
+				MustParseCardBytes(table.c2),
+				MustParseCardBytes(table.c3),
+				MustParseCardBytes(table.c4),
+				MustParseCardBytes(table.c5),
+				MustParseCardBytes(table.c6),
+				MustParseCardBytes(table.c7),
 			)
 			if result != table.want {
 				t.Errorf("\nFAIL:\nIn: %s, %s, %s, %s, %s, %s, %s \nWant: %d \nGot: %d \n", table.c1, table.c2, table.c3, table.c4, table.c5, table.c6, table.c7, table.want, result)
 			}
-		})
-	}
-}
-
-func TestParseCardStr(t *testing.T) {
-	type args struct {
-		c []byte
-	}
-	tests := []struct {
-		name string
-		args args
-		want Card
-	}{
-		{
-			"Two of Clubs (2C)",
-			args{c: []byte("2C")},
-			98306,
-		},
-		{
-			"Two of Clubs (2c)",
-			args{c: []byte("2c")},
-			98306,
-		},
-		{
-			"Jack of Hearts (JH)",
-			args{c: []byte("JH")},
-			33564957,
-		},
-		{
-			"Jack of Hearts (Jh)",
-			args{c: []byte("Jh")},
-			33564957,
-		},
-		{
-			"Jack of Hearts (jH)",
-			args{c: []byte("jH")},
-			33564957,
-		},
-		{
-			"Jack of Hearts (jh)",
-			args{c: []byte("jh")},
-			33564957,
-		},
-		{
-			"Ten of Spades (10S)",
-			args{c: []byte("10S")},
-			16783383,
-		},
-		{
-			"Ten of Spades (TS)",
-			args{c: []byte("TS")},
-			16783383,
-		},
-		{
-			"Nonsense (ABC)",
-			args{c: []byte("ABC")},
-			0,
-		},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if got := ParseCardStr(tt.args.c); got != tt.want {
-				t.Errorf("ParseCardStr() = %v, want %v", got, tt.want)
-			}
-
 		})
 	}
 }

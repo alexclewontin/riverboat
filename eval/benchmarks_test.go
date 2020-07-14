@@ -203,7 +203,7 @@ func BenchmarkFiveRiverboat(b *testing.B) {
 	for _, s := range dataRiverboat5 {
 		var cards []Card
 		for _, ss := range s {
-			c := ParseCardStr(ss)
+			c, _ := ParseCardBytes(ss)
 			cards = append(cards, c)
 		}
 		cardsRiverboat5 = append(cardsRiverboat5, cards)
@@ -257,7 +257,7 @@ func BenchmarkSixRiverboat(b *testing.B) {
 	for _, s := range dataRiverboat6 {
 		var cards []Card
 		for _, ss := range s {
-			c := ParseCardStr(ss)
+			c, _ := ParseCardBytes(ss)
 			cards = append(cards, c)
 		}
 		cardsRiverboat6 = append(cardsRiverboat6, cards)
@@ -311,7 +311,7 @@ func BenchmarkSevenRiverboat(b *testing.B) {
 	for _, s := range dataRiverboat7 {
 		var cards []Card
 		for _, ss := range s {
-			c := ParseCardStr(ss)
+			c, _ := ParseCardBytes(ss)
 			cards = append(cards, c)
 		}
 		cardsRiverboat7 = append(cardsRiverboat7, cards)
