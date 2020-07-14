@@ -98,7 +98,7 @@ func MustParseCardBytes(b []byte) Card {
 
 // Scan wraps ParseCardBytes to satisfy the fmt.Scanner interface
 // If ParseCardBytes returns an error, c is guaranteed not to change
-func (c *Card) Scan(state fmt.ScanState, verb rune) error {
+func (c Card) Scan(state fmt.ScanState, verb rune) error {
 
 	if verb != 'v' {
 		return errors.New("custom scan formats not implemented")
@@ -114,15 +114,17 @@ func (c *Card) Scan(state fmt.ScanState, verb rune) error {
 		return err
 	}
 
-	*c = card
+	c = card
 	return nil
 }
 
 // CardToString outputs a human-readable representation of a Card. Unlike Scan,
 // this may be useful for creating serialized GameViews for the end user.
-func (c *Card) String() string {
-	rank := (int32(*c) >> 8) & 0x0F
-	suit := int32(*c) & 0xF000
+// The returned string will be in all uppercase, and the rank 10 will be represented using
+// the letter T. Calling this method on an poorly formed card will result in undefined behavior.
+func (c Card) String() string {
+	rank := (int32(c) >> 8) & 0x0F
+	suit := int32(c) & 0xF000
 
 	return string(numToChrRanks[rank]) + string(numToChrSuits[suit])
 }

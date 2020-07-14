@@ -134,6 +134,39 @@ func TestParseCardBytes(t *testing.T) {
 	}
 }
 
+func TestString(t *testing.T) {
+	tests := []struct {
+		name    string
+		args    Card
+		want   	string
+	}{
+		{
+			"Two of Clubs",
+			98306,
+			"2C",
+		},
+		{
+			"Jack of Hearts",
+			33564957,
+			"JH",
+		},
+		{
+			"Ten of Spades",
+			16783383,
+			"TS",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := fmt.Sprintf("%v", tt.args)
+			if got != tt.want {
+				t.Errorf("fmt.Sprintf = %v, want = %v", got, tt.want)
+				return
+			}
+		})
+	}
+}
+
 func TestDefaultDeck(t *testing.T) {
 
 	t.Run("Len", func(t *testing.T) {
