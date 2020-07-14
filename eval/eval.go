@@ -1,15 +1,15 @@
 //* Copyright (c) 2020, Alex Lewontin
 //* All rights reserved.
-//* 
+//*
 //* Redistribution and use in source and binary forms, with or without
 //* modification, are permitted provided that the following conditions are met:
-//* 
+//*
 //* - Redistributions of source code must retain the above copyright notice, this
 //* list of conditions and the following disclaimer.
 //* - Redistributions in binary form must reproduce the above copyright notice,
 //* this list of conditions and the following disclaimer in the documentation
 //* and/or other materials provided with the distribution.
-//* 
+//*
 //* THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
 //* ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 //* WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -120,12 +120,12 @@ func BestFiveOfSeven(c0, c1, c2, c3, c4, c5, c6 Card) ([]Card, int) {
 	bestScore := 8000 // larger value than the worst hand, so the first real hand will always be better
 	for ndx := range base {
 		hand, score := BestFiveOfSix(
-			base[ndx], 
-			base[(ndx + 1) % 7], 
-			base[(ndx + 2) % 7], 
-			base[(ndx + 3) % 7], 
-			base[(ndx + 4) % 7],
-			base[(ndx + 5) % 7],
+			base[ndx],
+			base[(ndx+1)%7],
+			base[(ndx+2)%7],
+			base[(ndx+3)%7],
+			base[(ndx+4)%7],
+			base[(ndx+5)%7],
 		)
 		if score < bestScore {
 			bestScore = score
@@ -141,18 +141,18 @@ func BestFiveOfSix(c0, c1, c2, c3, c4, c5 Card) ([]Card, int) {
 	bestScore := 8000 // larger value than the worst hand, so the first real hand will always be better
 	for ndx := range base {
 		score := HandValue(
-			base[ndx], 
-			base[(ndx + 1) % 6], 
-			base[(ndx + 2) % 6], 
-			base[(ndx + 3) % 6], 
-			base[(ndx + 4) % 6],
+			base[ndx],
+			base[(ndx+1)%6],
+			base[(ndx+2)%6],
+			base[(ndx+3)%6],
+			base[(ndx+4)%6],
 		)
 		if score < bestScore {
 			bestScore = score
 			bestNdx = ndx
 		}
 	}
-	return []Card{base[bestNdx], base[(bestNdx + 1) % 6],  base[(bestNdx + 2) % 6],  base[(bestNdx + 3) % 6],  base[(bestNdx + 4) % 6],}, bestScore
+	return []Card{base[bestNdx], base[(bestNdx+1)%6], base[(bestNdx+2)%6], base[(bestNdx+3)%6], base[(bestNdx+4)%6]}, bestScore
 }
 
 var primeRanks = [13]int32{2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41}
