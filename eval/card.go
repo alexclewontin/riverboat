@@ -96,6 +96,15 @@ func MustParseCardBytes(b []byte) Card {
 	return c
 }
 
+// MustParseCardString is the same as MustParseCardBytes, except it takes a string as an arg
+func MustParseCardString(s string) Card {
+	c, err := ParseCardBytes([]byte(s))
+	if err != nil {
+		panic(err)
+	}
+	return c
+}
+
 // Scan wraps ParseCardBytes to satisfy the fmt.Scanner interface
 // If ParseCardBytes returns an error, c is guaranteed not to change
 func (c Card) Scan(state fmt.ScanState, verb rune) error {
