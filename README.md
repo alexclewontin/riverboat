@@ -96,7 +96,9 @@ Inspect the game's state:
 
 ## Documentation
 
-Full documentation can be found [here](https://pkg.go.dev/github.com/alexclewontin/riverboat) (TODO: flesh this out).
+Full documentation for Riverboat can be found [here](https://pkg.go.dev/github.com/alexclewontin/riverboat).
+
+Full documentation for Riverboat's evaluation module can be found [here](https://pkg.go.dev/github.com/alexclewontin/riverboat/eval).
 
 ## Contributing
 
