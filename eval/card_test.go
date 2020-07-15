@@ -136,9 +136,9 @@ func TestParseCardBytes(t *testing.T) {
 
 func TestString(t *testing.T) {
 	tests := []struct {
-		name    string
-		args    Card
-		want   	string
+		name string
+		args Card
+		want string
 	}{
 		{
 			"Two of Clubs",
