@@ -3,3 +3,4 @@ benchmark_results.txt
 *.rej
 profile.out
 *.test
+eval/optimization_test.go

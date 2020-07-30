@@ -74,7 +74,7 @@ func HandValue(c0, c1, c2, c3, c4 Card) int {
 //
 // WARNING: See the warning associated with HandValue.
 func BestFiveOfSeven(c0, c1, c2, c3, c4, c5, c6 Card) ([]Card, int) {
-	base := []Card{c0, c1, c2, c3, c4, c5, c6}
+	base := [7]Card{c0, c1, c2, c3, c4, c5, c6}
 	var bestHand []Card
 	bestScore := 8000 // larger value than the worst hand, so the first real hand will always be better
 	for ndx := range base {
@@ -100,7 +100,7 @@ func BestFiveOfSeven(c0, c1, c2, c3, c4, c5, c6 Card) ([]Card, int) {
 //
 // WARNING: See the warning associated with HandValue.
 func BestFiveOfSix(c0, c1, c2, c3, c4, c5 Card) ([]Card, int) {
-	base := []Card{c0, c1, c2, c3, c4, c5}
+	base := [6]Card{c0, c1, c2, c3, c4, c5}
 	bestNdx := 0
 	bestScore := 8000 // larger value than the worst hand, so the first real hand will always be better
 	for ndx := range base {
