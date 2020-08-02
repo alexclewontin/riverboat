@@ -67,7 +67,7 @@ func (p *player) putInChips(amt uint) {
 func (p *player) returnChips(amt uint) {
 	if p.TotalBet > amt {
 		p.TotalBet -= amt
-		p.Stack -= amt
+		p.Stack += amt
 	} else {
 		p.Stack += p.TotalBet
 		p.TotalBet = 0

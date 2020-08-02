@@ -171,6 +171,8 @@ func Deal(g *Game, pn uint, data uint) error {
 			g.communityCards[i] = 0
 		}
 
+		g.pots = []Pot{}
+
 		for !g.players[g.dealerNum].Ready {
 			g.dealerNum = (g.dealerNum + 1) % uint(len(g.players))
 		}
