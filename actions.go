@@ -90,6 +90,9 @@ func Bet(g *Game, pn uint, data uint) error {
 		// More than calling, and at least the minimum raise
 		isLegal = true
 		g.minRaise = betVal + p.Bet - minBet
+		for i := range g.players {
+			g.players[i].Called = false
+		}
 	}
 
 	if !isLegal {
@@ -99,6 +102,7 @@ func Bet(g *Game, pn uint, data uint) error {
 	}
 
 	g.players[pn].putInChips(betVal)
+	g.players[pn].Called = true
 
 	g.updateRoundInfo()
 

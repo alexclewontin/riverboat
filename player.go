@@ -30,6 +30,7 @@ import (
 type player struct {
 	Ready      bool
 	In         bool
+	Called     bool
 	TotalBuyIn uint
 	Stack      uint
 	Bet        uint
@@ -46,6 +47,7 @@ func (p *player) initialize() {
 
 	p.Ready = false
 	p.In = false
+	p.Called = false
 
 }
 

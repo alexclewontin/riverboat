@@ -146,7 +146,7 @@ func (g *Game) readyCount() uint {
 }
 
 func (g *Game) isCalled(pn uint) bool {
-	return g.players[pn].allIn() || (g.players[pn].Bet == g.toCall())
+	return g.players[pn].allIn() || (g.players[pn].Called)
 }
 
 func (g *Game) initStage() {
@@ -160,6 +160,7 @@ func (g *Game) initStage() {
 
 	for i := range g.players {
 		g.players[i].Bet = 0
+		g.players[i].Called = false
 	}
 
 	g.minRaise = g.config.BigBlind
@@ -227,6 +228,7 @@ func (g *Game) resetForNextHand() {
 
 	for i := range g.players {
 		g.players[i].In = false
+		g.players[i].Called = false
 		g.players[i].Bet = 0
 		g.players[i].TotalBet = 0
 
@@ -277,7 +279,7 @@ func (g *Game) updateRoundInfo() {
 	// If two or more players are in, but not everybody has called
 	if !allCalled {
 		// just move action to next player
-		for g.isCalled(g.actionNum) || g.players[g.actionNum].allIn() || !g.players[g.actionNum].In {
+		for g.isCalled(g.actionNum) || !g.players[g.actionNum].In {
 			g.actionNum = (g.actionNum + 1) % uint(len(g.players))
 		}
 
@@ -436,6 +438,7 @@ func NewGame() *Game {
 		SmallBlind: 10,
 		MaxBuy:     0,
 	}
+	newGame.communityCards = make([]Card, 5)
 
 	return &newGame
 }
