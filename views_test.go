@@ -24,11 +24,13 @@
 package riverboat
 
 import (
+	"encoding/json"
 	"fmt"
-	. "github.com/alexclewontin/riverboat/eval"
 	"reflect"
 	"sync"
 	"testing"
+
+	. "github.com/alexclewontin/riverboat/eval"
 )
 
 func TestGame_GenerateOmniView_Driver(t *testing.T) {
@@ -174,10 +176,10 @@ func TestGame_GenerateOmniViewChangedVals(t *testing.T) {
 				deck: DefaultDeck,
 				pots: []Pot{
 					{
-						TopShare:          100,
-						Amt:               1000,
-						EligblePlayerNums: []uint{0, 1, 2, 3},
-						WinningPlayerNums: []uint{2},
+						TopShare:           100,
+						Amt:                1000,
+						EligiblePlayerNums: []uint{0, 1, 2, 3},
+						WinningPlayerNums:  []uint{2},
 						WinningHand: []Card{
 							MustParseCardString("AS"),
 							MustParseCardString("KS"),
@@ -225,10 +227,10 @@ func TestGame_GenerateOmniViewChangedVals(t *testing.T) {
 				deck: DefaultDeck,
 				pots: []Pot{
 					{
-						TopShare:          100,
-						Amt:               1000,
-						EligblePlayerNums: []uint{0, 1, 2, 3},
-						WinningPlayerNums: []uint{2},
+						TopShare:           100,
+						Amt:                1000,
+						EligiblePlayerNums: []uint{0, 1, 2, 3},
+						WinningPlayerNums:  []uint{2},
 						WinningHand: []Card{
 							MustParseCardString("AS"),
 							MustParseCardString("KS"),
@@ -260,7 +262,15 @@ func TestGame_GenerateOmniViewChangedVals(t *testing.T) {
 			view.Players[0].Bet = view.Players[0].Bet + 5
 			view.Deck.Pop()
 			view.Pots[0].Amt = view.Pots[0].Amt + 1
-			view.Pots[0].EligblePlayerNums[0] = view.Pots[0].EligblePlayerNums[0] + 5
+			view.Pots[0].EligiblePlayerNums[0] = view.Pots[0].EligiblePlayerNums[0] + 5
+
+			jsonView, err := json.Marshal(view)
+
+			if err != nil {
+				panic(err)
+			}
+
+			fmt.Printf("%s", string(jsonView))
 
 			if !reflect.DeepEqual(g, tt.want) {
 				t.Errorf("\nBefore: %+v\nAfter %+v", tt.want, g)

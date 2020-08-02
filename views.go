@@ -80,7 +80,7 @@ func copyPots(src []Pot) []Pot {
 		ret[i].Amt = src[i].Amt
 		ret[i].TopShare = src[i].TopShare
 		ret[i].WinningScore = src[i].WinningScore
-		ret[i].EligblePlayerNums = append([]uint{}, src[i].EligblePlayerNums...)
+		ret[i].EligiblePlayerNums = append([]uint{}, src[i].EligiblePlayerNums...)
 		ret[i].WinningPlayerNums = append([]uint{}, src[i].WinningPlayerNums...)
 		ret[i].WinningHand = append([]Card{}, src[i].WinningHand...)
 	}
@@ -149,10 +149,30 @@ func (g *Game) GeneratePlayerView(pn uint) *GameView {
 
 	if g.getStage() == PreDeal {
 		for _, pot := range g.pots {
-			//TODO: technically, this should start with the called player and go around.
-			// For the moment, we're just gonna show the winners
-			for i := range pot.WinningPlayerNums {
-				showCards(uint(i))
+
+			winnercount := 0
+			for i := 0; i < len(g.players); i++ {
+				pni := (g.calledNum + uint(i)) % uint(len(g.players))
+				for _, j := range pot.WinningPlayerNums {
+					if pni == j {
+						winnercount = winnercount + 1
+						showCards(pni)
+						break
+					}
+				}
+
+				if winnercount == len(pot.WinningPlayerNums) {
+					break
+				}
+
+				if winnercount == 0 {
+					for _, j := range pot.EligiblePlayerNums {
+						if pni == j {
+							showCards(pni)
+							break
+						}
+					}
+				}
 			}
 		}
 	}

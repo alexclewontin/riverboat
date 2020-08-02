@@ -92,6 +92,7 @@ func Bet(g *Game, pn uint, data uint) error {
 		g.minRaise = betVal + p.Bet - minBet
 		for i := range g.players {
 			g.players[i].Called = false
+			g.calledNum = pn
 		}
 	}
 

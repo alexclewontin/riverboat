@@ -68,12 +68,12 @@ const (
 )
 
 type Pot struct {
-	TopShare          uint
-	Amt               uint
-	EligblePlayerNums []uint
-	WinningPlayerNums []uint
-	WinningHand       []Card
-	WinningScore      int
+	TopShare           uint
+	Amt                uint
+	EligiblePlayerNums []uint
+	WinningPlayerNums  []uint
+	WinningHand        []Card
+	WinningScore       int
 }
 
 type GameConfig struct {
@@ -100,6 +100,7 @@ type Game struct {
 	deck           Deck
 	pots           []Pot
 	minRaise       uint
+	calledNum      uint
 }
 
 func (g *Game) getStage() GameStage {
@@ -156,6 +157,7 @@ func (g *Game) initStage() {
 		for !g.players[g.actionNum].In {
 			g.actionNum = (g.actionNum + 1) % uint(len(g.players))
 		}
+		g.calledNum = g.actionNum
 	}
 
 	for i := range g.players {
@@ -269,6 +271,7 @@ func (g *Game) updateRoundInfo() {
 		g.setStageAndBetting(PreDeal, false)
 
 		//TODO: Create a pot here to simplify sending result description
+		// But this is special because cards do not need to be shown
 		for _, p := range g.players {
 			g.players[inPlayerNums[0]].Stack += p.TotalBet
 		}
@@ -324,7 +327,7 @@ func (g *Game) updateRoundInfo() {
 
 				if g.players[i].TotalBet >= newPot.TopShare {
 					if g.players[i].In {
-						newPot.EligblePlayerNums = append(newPot.EligblePlayerNums, uint(i))
+						newPot.EligiblePlayerNums = append(newPot.EligiblePlayerNums, uint(i))
 					}
 					newPot.Amt += newPot.TopShare
 					g.players[i].TotalBet -= newPot.TopShare
@@ -340,7 +343,7 @@ func (g *Game) updateRoundInfo() {
 		for i := range pots {
 			pots[i].WinningScore = 8000
 
-			for _, num := range pots[i].EligblePlayerNums {
+			for _, num := range pots[i].EligiblePlayerNums {
 
 				hand, score := BestFiveOfSeven(
 					g.players[num].Cards[0],
@@ -370,11 +373,13 @@ func (g *Game) updateRoundInfo() {
 		//The above takes care of all the all-in side pots. One last pot for the non-all-in people
 
 		var finalPot Pot
+		finalPot.EligiblePlayerNums = []uint{}
 
 		finalPot.WinningScore = 8000
 
 		for i, p := range g.players {
 			if p.In && !p.allIn() {
+				finalPot.EligiblePlayerNums = append(finalPot.EligiblePlayerNums, uint(i))
 				finalPot.Amt += p.TotalBet
 				p.TotalBet = 0
 

@@ -221,7 +221,7 @@ func TestIntegration_Scenarios(t *testing.T) {
 		}
 	})
 
-	t.Run("Scenario 6", func(t *testing.T) {
+	t.Run("Scenario 6 simple", func(t *testing.T) {
 		var err error
 		g := NewGame()
 
@@ -369,7 +369,7 @@ func TestIntegration_Scenarios(t *testing.T) {
 
 	})
 
-	t.Run("Scenario 7", func(t *testing.T) {
+	t.Run("Scenario 7 fold", func(t *testing.T) {
 		var err error
 		g := NewGame()
 
@@ -504,4 +504,147 @@ func TestIntegration_Scenarios(t *testing.T) {
 		}
 
 	})
+
+	t.Run("Scenario 8 reraise", func(t *testing.T) {
+		var err error
+		g := NewGame()
+
+		pn_a := g.AddPlayer()
+		pn_b := g.AddPlayer()
+		pn_c := g.AddPlayer()
+
+		err = BuyIn(g, pn_a, 100)
+
+		if err != nil {
+			t.Errorf("Test failed - Error buying in: %s", err)
+		}
+
+		err = BuyIn(g, pn_b, 100)
+
+		if err != nil {
+			t.Errorf("Test failed - Error buying in: %s", err)
+		}
+
+		err = BuyIn(g, pn_c, 100)
+
+		if err != nil {
+			t.Errorf("Test failed - Error buying in: %s", err)
+		}
+
+		err = ToggleReady(g, pn_a, 0)
+
+		if err != nil {
+			t.Errorf("Test failed - Error marking ready: %s", err)
+		}
+
+		err = ToggleReady(g, pn_b, 0)
+
+		if err != nil {
+			t.Errorf("Test failed - Error marking ready: %s", err)
+		}
+
+		err = ToggleReady(g, pn_c, 0)
+
+		if err != nil {
+			t.Errorf("Test failed - Error marking ready: %s", err)
+		}
+
+		// Preflop
+
+		err = Deal(g, pn_a, 0)
+
+		if err != nil {
+			t.Errorf("Test failed - error dealing: %s", err)
+		}
+
+		err = Bet(g, pn_a, 25)
+
+		if err != nil {
+			t.Errorf("Test failed - error betting: %s", err)
+		}
+
+		err = Bet(g, pn_b, 15)
+
+		if err != nil {
+			t.Errorf("Test failed - error betting: %s", err)
+		}
+
+		err = Bet(g, pn_c, 0)
+
+		if err != nil {
+			t.Errorf("Test failed - error betting: %s", err)
+		}
+
+		// Flop
+		err = Deal(g, pn_a, 0)
+
+		if err != nil {
+			t.Errorf("Test failed - error dealing: %s", err)
+		}
+
+		err = Bet(g, pn_b, 25)
+
+		if err != nil {
+			t.Errorf("Test failed - error betting: %s", err)
+		}
+
+		err = Fold(g, pn_c, 0)
+
+		if err != nil {
+			t.Errorf("Test failed - error betting: %s", err)
+		}
+
+		err = Bet(g, pn_a, 50)
+
+		if err != nil {
+			t.Errorf("Test failed - error betting: %s", err)
+		}
+
+		err = Bet(g, pn_b, 25)
+
+		if err != nil {
+			t.Errorf("Test failed - error betting: %s", err)
+		}
+
+		// Turn
+		err = Deal(g, pn_a, 0)
+
+		if err != nil {
+			t.Errorf("Test failed - error dealing: %s", err)
+		}
+
+		err = Bet(g, pn_b, 0)
+
+		if err != nil {
+			t.Errorf("Test failed - error betting: %s", err)
+		}
+
+		err = Bet(g, pn_a, 0)
+
+		if err != nil {
+			t.Errorf("Test failed - error betting: %s", err)
+		}
+
+		//River
+
+		err = Deal(g, pn_a, 0)
+
+		if err != nil {
+			t.Errorf("Test failed - error dealing: %s", err)
+		}
+
+		err = Bet(g, pn_b, 0)
+
+		if err != nil {
+			t.Errorf("Test failed - error betting: %s", err)
+		}
+
+		err = Bet(g, pn_a, 0)
+
+		if err != nil {
+			t.Errorf("Test failed - error betting: %s", err)
+		}
+
+	})
+
 }
