@@ -159,4 +159,65 @@ func TestIntegration_Scenarios(t *testing.T) {
 		}
 	})
 
+	t.Run("Scenario 5", func(t *testing.T) {
+		var err error
+		g := NewGame()
+
+		pn_a := g.AddPlayer()
+		pn_b := g.AddPlayer()
+		pn_c := g.AddPlayer()
+
+		err = BuyIn(g, pn_a, 100)
+
+		if err != nil {
+			t.Errorf("Test failed - Error buying in: %s", err)
+		}
+
+		err = BuyIn(g, pn_b, 100)
+
+		if err != nil {
+			t.Errorf("Test failed - Error buying in: %s", err)
+		}
+
+		err = BuyIn(g, pn_c, 100)
+
+		if err != nil {
+			t.Errorf("Test failed - Error buying in: %s", err)
+		}
+
+		err = ToggleReady(g, pn_a, 0)
+
+		if err != nil {
+			t.Errorf("Test failed - Error marking ready: %s", err)
+		}
+
+		err = ToggleReady(g, pn_b, 0)
+
+		if err != nil {
+			t.Errorf("Test failed - Error marking ready: %s", err)
+		}
+
+		err = ToggleReady(g, pn_c, 0)
+
+		if err != nil {
+			t.Errorf("Test failed - Error marking ready: %s", err)
+		}
+
+		err = Deal(g, pn_a, 0)
+
+		if err != nil {
+			t.Errorf("Test failed - error dealing: %s", err)
+		}
+
+		err = Bet(g, pn_a, 25)
+
+		if err != nil {
+
+			t.Errorf("Test failed - error betting: %s", err)
+		}
+
+		if g.players[pn_a].Bet != 25 {
+			t.Errorf("Betting mechanic not working.")
+		}
+	})
 }

@@ -98,6 +98,8 @@ func Bet(g *Game, pn uint, data uint) error {
 		return ErrIllegalAction
 	}
 
+	g.players[pn].putInChips(betVal)
+
 	g.updateRoundInfo()
 
 	return nil
