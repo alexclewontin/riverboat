@@ -150,9 +150,12 @@ func (g *Game) isCalled(pn uint) bool {
 }
 
 func (g *Game) initStage() {
-	g.actionNum = (g.dealerNum + 1) % uint(len(g.players))
-	for !g.players[g.actionNum].In {
-		g.actionNum = (g.actionNum + 1) % uint(len(g.players))
+
+	if g.getStage() != PreDeal {
+		g.actionNum = (g.dealerNum + 1) % uint(len(g.players))
+		for !g.players[g.actionNum].In {
+			g.actionNum = (g.actionNum + 1) % uint(len(g.players))
+		}
 	}
 
 	for i := range g.players {
@@ -165,14 +168,13 @@ func (g *Game) initStage() {
 }
 
 //Returns nil if there are more than 2 players ready, ErrIllegalAction otherwise
-func (g *Game) updateBlindNums() error {
+func (g *Game) updateBlindNums() {
 	readyCount := g.readyCount()
 
 	if readyCount < 2 {
 		g.bbNum = g.dealerNum
 		g.sbNum = g.dealerNum
 		g.utgNum = g.dealerNum
-		return ErrIllegalAction
 
 	} else if readyCount == 2 {
 		g.sbNum = g.dealerNum
@@ -197,8 +199,6 @@ func (g *Game) updateBlindNums() error {
 			g.utgNum = (g.utgNum + 1) % uint(len(g.players))
 		}
 	}
-
-	return nil
 }
 
 func (g *Game) toCall() uint {

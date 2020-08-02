@@ -151,6 +151,10 @@ func Deal(g *Game, pn uint, data uint) error {
 		return ErrIllegalAction
 	}
 
+	if g.readyCount() < 2 {
+		return ErrIllegalAction
+	}
+
 	g.initStage()
 
 	switch stage {
@@ -162,13 +166,10 @@ func Deal(g *Game, pn uint, data uint) error {
 		}
 
 		for !g.players[g.dealerNum].Ready {
-			g.dealerNum = g.dealerNum + 1
+			g.dealerNum = (g.dealerNum + 1) % uint(len(g.players))
 		}
 
-		err := g.updateBlindNums()
-		if err != nil {
-			return err
-		}
+		g.updateBlindNums()
 
 		g.actionNum = g.utgNum
 
