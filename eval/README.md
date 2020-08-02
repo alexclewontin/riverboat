@@ -1,16 +1,16 @@
 ## Benchmarks
 
 Riverboat is faster than  
-- [chehsunliu/poker](github.com/chehsunliu/poker)
+- [chehsunliu/poker](http://github.com/chehsunliu/poker)
     - by 1.7x for 5-card evaluation
     - by 1.2x for 6-card evaluation*
     - by 1.4x for 7-card evaluation*
-- [notnil/joker](github.com/notnil/joker/hand)
+- [notnil/joker](http://github.com/notnil/joker)
     - by 325x for 5-card evaluation
     - by 150x for 6-card evaluation*
     - by 74x for 7-card evaluation*
 
-<sup><sub>*Riverboat and [notnil/joker's](github.com/notnil/joker/hand) 6- and 7-card hand evaluation are not directly comparable to [chehsunliu/poker's](github.com/chehsunliu/poker), as Riverboat and Joker return both the best 5 cards, as well as their absolute ranking, whereas Poker only provides the absolute ranking.
+<sup><sub>*Riverboat and [notnil/joker's](http://github.com/notnil/joker) 6- and 7-card hand evaluation are not directly comparable to [chehsunliu/poker's](http://github.com/chehsunliu/poker), as Riverboat and Joker return both the best 5 cards, as well as their absolute ranking, whereas Poker only provides the absolute ranking.
 
 All benchmarks were measured over the same set of cards, and the timing did not include the conversion of cards from human-readable string form to native representation.
 
