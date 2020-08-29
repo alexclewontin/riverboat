@@ -273,10 +273,10 @@ func (g *Game) updateRoundInfo() {
 
 	tmpPlayers := append([]player{}, g.players...)
 	g.pots = []Pot{}
-	for _, ndx := range allInPlayerNums {
+	for _, pn := range allInPlayerNums {
 
 		newPot := Pot{}
-		newPot.TopShare = tmpPlayers[ndx].TotalBet
+		newPot.TopShare = tmpPlayers[pn].TotalBet
 
 		for i := range tmpPlayers {
 
