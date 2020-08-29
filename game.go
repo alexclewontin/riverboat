@@ -240,7 +240,7 @@ func (g *Game) resetForNextHand() {
 
 	}
 
-	g.dealerNum = g.dealerNum + 1
+	g.dealerNum = (g.dealerNum + 1) % uint(len(g.players))
 	for !g.players[g.dealerNum].Ready {
 		g.dealerNum = (g.dealerNum + 1) % uint(len(g.players))
 	}
