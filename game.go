@@ -301,9 +301,9 @@ func (g *Game) updateRoundInfo() {
 	finalPot.EligiblePlayerNums = []uint{}
 
 	for i, p := range tmpPlayers {
+		finalPot.Amt += p.TotalBet
 		if p.In && !p.allIn() {
 			finalPot.EligiblePlayerNums = append(finalPot.EligiblePlayerNums, uint(i))
-			finalPot.Amt += p.TotalBet
 		}
 	}
 
