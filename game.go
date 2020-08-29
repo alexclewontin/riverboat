@@ -265,6 +265,50 @@ func (g *Game) updateRoundInfo() {
 		}
 	}
 
+	// Update the pot information
+
+	sort.Slice(allInPlayerNums, func(i, j int) bool {
+		return g.players[allInPlayerNums[i]].TotalBet < g.players[allInPlayerNums[j]].TotalBet
+	}) //here, the whole slice needs to be sorted by the totalBet amount of the players represented
+
+	tmpPlayers := append([]player{}, g.players...)
+	g.pots = []Pot{}
+	for _, ndx := range allInPlayerNums {
+
+		newPot := Pot{}
+		newPot.TopShare = tmpPlayers[ndx].TotalBet
+
+		for i := range tmpPlayers {
+
+			if tmpPlayers[i].TotalBet >= newPot.TopShare {
+				if tmpPlayers[i].In {
+					newPot.EligiblePlayerNums = append(newPot.EligiblePlayerNums, uint(i))
+				}
+				newPot.Amt += newPot.TopShare
+				tmpPlayers[i].TotalBet -= newPot.TopShare
+			} else {
+				newPot.Amt += tmpPlayers[i].TotalBet
+				tmpPlayers[i].TotalBet = 0
+			}
+		}
+
+		g.pots = append(g.pots, newPot)
+	}
+
+	//The above takes care of all the all-in side pots. One last pot for the non-all-in people
+
+	var finalPot Pot
+	finalPot.EligiblePlayerNums = []uint{}
+
+	for i, p := range tmpPlayers {
+		if p.In && !p.allIn() {
+			finalPot.EligiblePlayerNums = append(finalPot.EligiblePlayerNums, uint(i))
+			finalPot.Amt += p.TotalBet
+		}
+	}
+
+	g.pots = append(g.pots, finalPot)
+
 	// If less than two players are still in, the hand has been conceded
 	if len(inPlayerNums) < 2 {
 		//the sole number in the array is the winner by default
@@ -292,8 +336,8 @@ func (g *Game) updateRoundInfo() {
 	//If there are two or more players in, and everybody has either called or is all-in, and at this point we determine that only one player is
 	//in but not all in, we take all the money above and beyond the second highest better (who is all in) and return it to the people who bet it
 	//If the only players in are both all in for the exact same amount of money, nothing happens here
-	//(but we can't skip in the "0 not all in" case because technically before this step happens) a player who after this step may read as not all in
-	//could return true for the isAllIn method
+	//(but we can't skip in the "0 not all in" case because technically before this step happens a player who after this step may read as not all in
+	//could return true for the isAllIn method)
 	if len(inPlayerNums)-len(allInPlayerNums) < 2 {
 		var topBettor1 uint = 0
 		var topBettor2 uint = 0
@@ -313,37 +357,10 @@ func (g *Game) updateRoundInfo() {
 	//If there are two or more players in, and everybody has called or is all in, then end the hand f we've just finished river betting
 	if g.getStage() == River {
 
-		sort.Slice(allInPlayerNums, func(i, j int) bool {
-			return g.players[allInPlayerNums[i]].TotalBet < g.players[allInPlayerNums[j]].TotalBet
-		}) //here, the whole slice needs to be sorted by the totalBet amount of the players represented
+		for i := range g.pots {
+			g.pots[i].WinningScore = 8000
 
-		var pots []Pot
-		for _, ndx := range allInPlayerNums {
-
-			newPot := Pot{}
-			newPot.TopShare = g.players[ndx].TotalBet
-
-			for i := range g.players {
-
-				if g.players[i].TotalBet >= newPot.TopShare {
-					if g.players[i].In {
-						newPot.EligiblePlayerNums = append(newPot.EligiblePlayerNums, uint(i))
-					}
-					newPot.Amt += newPot.TopShare
-					g.players[i].TotalBet -= newPot.TopShare
-				} else {
-					newPot.Amt += g.players[i].TotalBet
-					g.players[i].TotalBet = 0
-				}
-			}
-
-			pots = append(pots, newPot)
-		}
-
-		for i := range pots {
-			pots[i].WinningScore = 8000
-
-			for _, num := range pots[i].EligiblePlayerNums {
+			for _, num := range g.pots[i].EligiblePlayerNums {
 
 				hand, score := BestFiveOfSeven(
 					g.players[num].Cards[0],
@@ -355,60 +372,19 @@ func (g *Game) updateRoundInfo() {
 					g.communityCards[4],
 				)
 				// lower is better for the score
-				if score < pots[i].WinningScore {
-					pots[i].WinningScore = score
-					pots[i].WinningPlayerNums = []uint{num}
-					pots[i].WinningHand = hand
-				} else if score == pots[i].WinningScore {
-					pots[i].WinningPlayerNums = append(pots[i].WinningPlayerNums, num)
+				if score < g.pots[i].WinningScore {
+					g.pots[i].WinningScore = score
+					g.pots[i].WinningPlayerNums = []uint{num}
+					g.pots[i].WinningHand = hand
+				} else if score == g.pots[i].WinningScore {
+					g.pots[i].WinningPlayerNums = append(g.pots[i].WinningPlayerNums, num)
 				}
 			}
 
-			for _, num := range pots[i].WinningPlayerNums {
-				g.players[num].Stack += (pots[i].Amt / uint(len(pots[i].WinningPlayerNums)))
+			for _, num := range g.pots[i].WinningPlayerNums {
+				g.players[num].Stack += (g.pots[i].Amt / uint(len(g.pots[i].WinningPlayerNums)))
 				//TODO: leave the remainder in the middle! (some money will disappear currently)
 			}
-		}
-
-		//The above takes care of all the all-in side pots. One last pot for the non-all-in people
-
-		var finalPot Pot
-		finalPot.EligiblePlayerNums = []uint{}
-
-		finalPot.WinningScore = 8000
-
-		for i, p := range g.players {
-			if p.In && !p.allIn() {
-				finalPot.EligiblePlayerNums = append(finalPot.EligiblePlayerNums, uint(i))
-				finalPot.Amt += p.TotalBet
-				p.TotalBet = 0
-
-				hand, score := BestFiveOfSeven(
-					p.Cards[0],
-					p.Cards[1],
-					g.communityCards[0],
-					g.communityCards[1],
-					g.communityCards[2],
-					g.communityCards[3],
-					g.communityCards[4],
-				)
-				// lower is better for the score
-				if score < finalPot.WinningScore {
-					finalPot.WinningScore = score
-					finalPot.WinningPlayerNums = []uint{uint(i)}
-					finalPot.WinningHand = hand
-				} else if score == finalPot.WinningScore {
-					finalPot.WinningPlayerNums = append(finalPot.WinningPlayerNums, uint(i))
-				}
-			}
-		}
-
-		for _, p := range finalPot.WinningPlayerNums {
-			g.players[p].Stack += (finalPot.Amt / uint(len(finalPot.WinningPlayerNums)))
-		}
-
-		if finalPot.Amt != 0 {
-			g.pots = append(pots, finalPot)
 		}
 
 		g.resetForNextHand()
