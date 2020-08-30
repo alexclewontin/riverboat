@@ -245,6 +245,8 @@ func (g *Game) resetForNextHand() {
 		g.dealerNum = (g.dealerNum + 1) % uint(len(g.players))
 	}
 
+	g.pots = []Pot{}
+
 	g.setStageAndBetting(PreDeal, false)
 }
 
@@ -312,13 +314,13 @@ func (g *Game) updateRoundInfo() {
 	// If less than two players are still in, the hand has been conceded
 	if len(inPlayerNums) < 2 {
 		//the sole number in the array is the winner by default
-		g.setStageAndBetting(PreDeal, false)
-
 		//TODO: Create a pot here to simplify sending result description
 		// But this is special because cards do not need to be shown
 		for _, p := range g.players {
 			g.players[inPlayerNums[0]].Stack += p.TotalBet
 		}
+
+		g.resetForNextHand()
 
 		return
 	}
@@ -338,10 +340,10 @@ func (g *Game) updateRoundInfo() {
 	//If the only players in are both all in for the exact same amount of money, nothing happens here
 	//(but we can't skip in the "0 not all in" case because technically before this step happens a player who after this step may read as not all in
 	//could return true for the isAllIn method)
-	if len(inPlayerNums)-len(allInPlayerNums) < 2 {
+	if (len(inPlayerNums) - len(allInPlayerNums)) < 2 {
 		var topBettor1 uint = 0
 		var topBettor2 uint = 0
-
+		// TODO: what if everyone is all in?
 		for _, ndx := range inPlayerNums {
 			if g.players[ndx].TotalBet > g.players[topBettor1].TotalBet {
 				topBettor2 = topBettor1
