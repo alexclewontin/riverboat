@@ -23,7 +23,7 @@
 
 package riverboat
 
-// Action is the generic type of all actions, formalized to better allow external agents to interact with the game.
+// Action is the generic type of all state machine transitions, formalized to better allow external agents to interact with the game.
 // For all Actions, g is the game in which it is performed and pn is the player number performing the action.
 // data represents different things for different Actions.
 //
@@ -48,6 +48,10 @@ type Action func(g *Game, pn uint, data uint) error
 func Bet(g *Game, pn uint, data uint) error {
 	g.mtx.Lock()
 	defer g.mtx.Unlock()
+	return bet(g, pn, data)
+}
+
+func bet(g *Game, pn uint, data uint) error {
 
 	if !g.getBetting() {
 		return ErrIllegalAction
@@ -116,7 +120,10 @@ func Bet(g *Game, pn uint, data uint) error {
 func BuyIn(g *Game, pn uint, data uint) error {
 	g.mtx.Lock()
 	defer g.mtx.Unlock()
+	return buyIn(g, pn, data)
+}
 
+func buyIn(g *Game, pn uint, data uint) error {
 	p := g.getPlayer(pn)
 
 	//Can't buy in while playing
@@ -147,7 +154,10 @@ func BuyIn(g *Game, pn uint, data uint) error {
 func Deal(g *Game, pn uint, data uint) error {
 	g.mtx.Lock()
 	defer g.mtx.Unlock()
+	return deal(g, pn, data)
+}
 
+func deal(g *Game, pn uint, data uint) error {
 	if pn != g.dealerNum {
 		return ErrIllegalAction
 	}
@@ -225,6 +235,10 @@ func Deal(g *Game, pn uint, data uint) error {
 func Fold(g *Game, pn uint, data uint) error {
 	g.mtx.Lock()
 	defer g.mtx.Unlock()
+	return fold(g, pn, data)
+}
+
+func fold(g *Game, pn uint, data uint) error {
 
 	p := g.getPlayer(pn)
 
@@ -247,7 +261,10 @@ func Fold(g *Game, pn uint, data uint) error {
 func ToggleReady(g *Game, pn uint, data uint) error {
 	g.mtx.Lock()
 	defer g.mtx.Unlock()
+	return toggleReady(g, pn, data)
+}
 
+func toggleReady(g *Game, pn uint, data uint) error {
 	p := g.getPlayer(pn)
 
 	if p.In {
