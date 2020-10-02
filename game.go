@@ -385,7 +385,7 @@ func (g *Game) updateRoundInfo() {
 
 			for _, num := range g.pots[i].WinningPlayerNums {
 				g.players[num].Stack += (g.pots[i].Amt / uint(len(g.pots[i].WinningPlayerNums)))
-				//TODO: leave the remainder in the middle! (some money will disappear currently)
+				//TODO: leave the remainder in the middle! (fractional money will disappear currently)
 			}
 		}
 
@@ -394,6 +394,7 @@ func (g *Game) updateRoundInfo() {
 		// otherwise, just set betting to false so the dealer can deal the next part of the hand
 	} else {
 		g.setBetting(false)
+		deal(g, g.dealerNum, 0)
 	}
 	return
 

@@ -292,11 +292,6 @@ func TestIntegration_Scenarios(t *testing.T) {
 		}
 
 		// Flop
-		err = Deal(g, pn_a, 0)
-
-		if err != nil {
-			t.Errorf("Test failed - error dealing: %s", err)
-		}
 
 		err = Bet(g, pn_b, 25)
 
@@ -317,11 +312,6 @@ func TestIntegration_Scenarios(t *testing.T) {
 		}
 
 		// Turn
-		err = Deal(g, pn_a, 0)
-
-		if err != nil {
-			t.Errorf("Test failed - error dealing: %s", err)
-		}
 
 		err = Bet(g, pn_b, 0)
 
@@ -342,13 +332,6 @@ func TestIntegration_Scenarios(t *testing.T) {
 		}
 
 		//River
-
-		err = Deal(g, pn_a, 0)
-
-		if err != nil {
-			t.Errorf("Test failed - error dealing: %s", err)
-		}
-
 		err = Bet(g, pn_b, 0)
 
 		if err != nil {
@@ -440,11 +423,6 @@ func TestIntegration_Scenarios(t *testing.T) {
 		}
 
 		// Flop
-		err = Deal(g, pn_a, 0)
-
-		if err != nil {
-			t.Errorf("Test failed - error dealing: %s", err)
-		}
 
 		err = Bet(g, pn_b, 25)
 
@@ -465,12 +443,6 @@ func TestIntegration_Scenarios(t *testing.T) {
 		}
 
 		// Turn
-		err = Deal(g, pn_a, 0)
-
-		if err != nil {
-			t.Errorf("Test failed - error dealing: %s", err)
-		}
-
 		err = Bet(g, pn_b, 0)
 
 		if err != nil {
@@ -484,12 +456,6 @@ func TestIntegration_Scenarios(t *testing.T) {
 		}
 
 		//River
-
-		err = Deal(g, pn_a, 0)
-
-		if err != nil {
-			t.Errorf("Test failed - error dealing: %s", err)
-		}
 
 		err = Bet(g, pn_b, 0)
 
@@ -576,11 +542,6 @@ func TestIntegration_Scenarios(t *testing.T) {
 		}
 
 		// Flop
-		err = Deal(g, pn_a, 0)
-
-		if err != nil {
-			t.Errorf("Test failed - error dealing: %s", err)
-		}
 
 		err = Bet(g, pn_b, 25)
 
@@ -607,11 +568,6 @@ func TestIntegration_Scenarios(t *testing.T) {
 		}
 
 		// Turn
-		err = Deal(g, pn_a, 0)
-
-		if err != nil {
-			t.Errorf("Test failed - error dealing: %s", err)
-		}
 
 		err = Bet(g, pn_b, 0)
 
@@ -626,12 +582,6 @@ func TestIntegration_Scenarios(t *testing.T) {
 		}
 
 		//River
-
-		err = Deal(g, pn_a, 0)
-
-		if err != nil {
-			t.Errorf("Test failed - error dealing: %s", err)
-		}
 
 		err = Bet(g, pn_b, 0)
 
