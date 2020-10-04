@@ -229,8 +229,6 @@ func (g *Game) canOpen(pn uint) bool {
 func (g *Game) resetForNextHand() {
 
 	for i := range g.players {
-		g.players[i].In = false
-		g.players[i].Called = false
 		g.players[i].Bet = 0
 		g.players[i].TotalBet = 0
 
@@ -244,8 +242,6 @@ func (g *Game) resetForNextHand() {
 	for !g.players[g.dealerNum].Ready {
 		g.dealerNum = (g.dealerNum + 1) % uint(len(g.players))
 	}
-
-	g.pots = []Pot{}
 
 	g.setStageAndBetting(PreDeal, false)
 }

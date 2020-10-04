@@ -48,7 +48,7 @@ type GameView struct {
 func (g *Game) copyToView() *GameView {
 	//TODO: Is there some way to do this programatically? I considered using
 	// reflection, but since that happens at runtime it is less performant.
-	// Something like reflection, but evaulated at compile-time would be ideal
+	// Something like reflection, but evaluated at compile-time would be ideal
 	// Probably using go generate.
 
 	//WARNING: This needs to be the deepest of deep copies. If adding a field,
@@ -152,31 +152,40 @@ func (g *Game) GeneratePlayerView(pn uint) *GameView {
 	}
 
 	if g.getStage() == PreDeal {
+
+		showCards(g.calledNum)
+		_, scoreToBeat := BestFiveOfSeven(
+			g.players[g.calledNum].Cards[0],
+			g.players[g.calledNum].Cards[1],
+			g.communityCards[0],
+			g.communityCards[1],
+			g.communityCards[2],
+			g.communityCards[3],
+			g.communityCards[4],
+		)
+
+		for i := range g.players {
+			pni := (g.calledNum + uint(i)) % uint(len(g.players))
+			_, iScore := BestFiveOfSeven(
+				g.players[pni].Cards[0],
+				g.players[pni].Cards[1],
+				g.communityCards[0],
+				g.communityCards[1],
+				g.communityCards[2],
+				g.communityCards[3],
+				g.communityCards[4],
+			)
+
+			if (iScore < scoreToBeat) && g.players[pni].In {
+				showCards(pni)
+				scoreToBeat = iScore
+			}
+		}
+
 		for _, pot := range g.pots {
 
-			winnercount := 0
-			for i := 0; i < len(g.players); i++ {
-				pni := (g.calledNum + uint(i)) % uint(len(g.players))
-				for _, j := range pot.WinningPlayerNums {
-					if pni == j {
-						winnercount = winnercount + 1
-						showCards(pni)
-						break
-					}
-				}
-
-				if winnercount == len(pot.WinningPlayerNums) {
-					break
-				}
-
-				if winnercount == 0 {
-					for _, j := range pot.EligiblePlayerNums {
-						if pni == j {
-							showCards(pni)
-							break
-						}
-					}
-				}
+			for _, j := range pot.WinningPlayerNums {
+				showCards(j)
 			}
 		}
 	}

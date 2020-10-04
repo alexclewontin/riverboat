@@ -184,10 +184,6 @@ func deal(g *Game, pn uint, data uint) error {
 
 		g.pots = []Pot{}
 
-		for !g.players[g.dealerNum].Ready {
-			g.dealerNum = (g.dealerNum + 1) % uint(len(g.players))
-		}
-
 		g.updateBlindNums()
 
 		g.actionNum = g.utgNum
@@ -201,7 +197,12 @@ func deal(g *Game, pn uint, data uint) error {
 				g.players[i].Cards[0] = g.deck.Pop()
 				g.players[i].Cards[1] = g.deck.Pop()
 				g.players[i].In = true
+			} else {
+				g.players[i].Cards[0] = 0
+				g.players[i].Cards[1] = 0
 			}
+
+			g.players[i].Called = false
 		}
 
 		g.players[g.sbNum].putInChips(g.config.SmallBlind)

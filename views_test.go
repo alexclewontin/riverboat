@@ -270,7 +270,7 @@ func TestGame_GenerateOmniViewChangedVals(t *testing.T) {
 				panic(err)
 			}
 
-			fmt.Printf("%s", string(jsonView))
+			t.Logf("%s", string(jsonView))
 
 			if !reflect.DeepEqual(g, tt.want) {
 				t.Errorf("\nBefore: %+v\nAfter %+v", tt.want, g)
