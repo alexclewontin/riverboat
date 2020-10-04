@@ -150,26 +150,6 @@ func (g *Game) isCalled(pn uint) bool {
 	return g.players[pn].allIn() || (g.players[pn].Called)
 }
 
-func (g *Game) initStage() {
-
-	if g.getStage() != PreDeal {
-		g.actionNum = (g.dealerNum + 1) % uint(len(g.players))
-		for !g.players[g.actionNum].In {
-			g.actionNum = (g.actionNum + 1) % uint(len(g.players))
-		}
-		g.calledNum = g.actionNum
-	}
-
-	for i := range g.players {
-		g.players[i].Bet = 0
-		g.players[i].Called = false
-	}
-
-	g.minRaise = g.config.BigBlind
-
-	//TODO: if all or all but one are all-in and its not the end, don't set betting to true on the next deal
-}
-
 //Returns nil if there are more than 2 players ready, ErrIllegalAction otherwise
 func (g *Game) updateBlindNums() {
 	readyCount := g.readyCount()

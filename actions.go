@@ -69,7 +69,7 @@ func bet(g *Game, pn uint, data uint) error {
 	var minBet uint = g.toCall()
 	var maxBet uint = g.getLimit()
 
-	var isLegal bool
+	var betLegalError error = nil
 
 	//TODO: I don't love this if-else if chain, but I was originally using
 	// a lambda with multiple returns as a control flow structure (which
@@ -77,22 +77,22 @@ func bet(g *Game, pn uint, data uint) error {
 	//hurts readability. Refactor to better express
 	if !g.canOpen(pn) {
 		//Won't hit now, reserved for future implementations
-		isLegal = false
+		betLegalError = ErrIllegalAction
 	} else if betVal >= maxBet {
 		//You can always go all-in
-		isLegal = true
+		betLegalError = nil
 	} else if betVal < (minBet - p.Bet) {
 		//Not calling the minimum needed
-		isLegal = false
+		betLegalError = ErrIllegalAction
 	} else if betVal == (minBet - p.Bet) {
 		//Calling exactly
-		isLegal = true
+		betLegalError = nil
 	} else if betVal < (minBet + g.minRaise - p.Bet) {
 		// More than calling, but less than minimum raise
-		isLegal = false
+		betLegalError = ErrIllegalAction
 	} else {
 		// More than calling, and at least the minimum raise
-		isLegal = true
+		betLegalError = nil
 		g.minRaise = betVal + p.Bet - minBet
 		for i := range g.players {
 			g.players[i].Called = false
@@ -100,10 +100,10 @@ func bet(g *Game, pn uint, data uint) error {
 		}
 	}
 
-	if !isLegal {
+	if betLegalError != nil {
 		//I could just return this in every spot, but i suspect the structure of what is legal
 		//will change as more betting schemes are introduced, so seems more extensible to keep it here
-		return ErrIllegalAction
+		return betLegalError
 	}
 
 	g.players[pn].putInChips(betVal)
@@ -172,7 +172,14 @@ func deal(g *Game, pn uint, data uint) error {
 		return ErrIllegalAction
 	}
 
-	g.initStage()
+	for i := range g.players {
+		g.players[i].Bet = 0
+		g.players[i].Called = false
+	}
+
+	g.minRaise = g.config.BigBlind
+
+	//TODO: if all or all but one are all-in and its not the end, don't set betting to true on the next deal
 
 	switch stage {
 	case PreDeal:
@@ -209,14 +216,33 @@ func deal(g *Game, pn uint, data uint) error {
 		g.players[g.bbNum].putInChips(g.config.BigBlind)
 
 	case PreFlop:
+
+		g.actionNum = (g.dealerNum + 1) % uint(len(g.players))
+		for !g.players[g.actionNum].In {
+			g.actionNum = (g.actionNum + 1) % uint(len(g.players))
+		}
+		g.calledNum = g.actionNum
+
 		g.communityCards[0] = g.deck.Pop()
 		g.communityCards[1] = g.deck.Pop()
 		g.communityCards[2] = g.deck.Pop()
 
 	case Flop:
+		g.actionNum = (g.dealerNum + 1) % uint(len(g.players))
+		for !g.players[g.actionNum].In {
+			g.actionNum = (g.actionNum + 1) % uint(len(g.players))
+		}
+		g.calledNum = g.actionNum
+
 		g.communityCards[3] = g.deck.Pop()
 
 	case Turn:
+		g.actionNum = (g.dealerNum + 1) % uint(len(g.players))
+		for !g.players[g.actionNum].In {
+			g.actionNum = (g.actionNum + 1) % uint(len(g.players))
+		}
+		g.calledNum = g.actionNum
+
 		g.communityCards[4] = g.deck.Pop()
 
 	default:
