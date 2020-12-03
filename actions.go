@@ -281,6 +281,31 @@ func fold(g *Game, pn uint, data uint) error {
 
 }
 
+// Leave marks a player as having left the game. This is essentially the same as marking a player
+// "not ready" (see ToggleReady) except it also marks the player as "left", which provides a distinct
+// state (e.g. so that frontends can render "left" players and "not ready" players differently)
+func Leave(g *Game, pn uint, data uint) error {
+	g.mtx.Lock()
+	defer g.mtx.Unlock()
+	return toggleReady(g, pn, data)
+}
+
+func leave(g *Game, pn uint, data uint) error {
+	p := g.getPlayer(pn)
+	var err error
+
+	if p.Ready {
+		err = toggleReady(g, pn, data)
+		if err != nil {
+			return err
+		}
+	}
+
+	p.Left = true
+
+	return nil
+}
+
 // ToggleReady marks a player as "ready" if they are currently "not ready"
 // or "not ready" if they are currently "ready." If the player attempting it is in the current round
 // ToggleReady will return an error. If the player attempting it has no money, ToggleReady will return an error.
@@ -318,6 +343,8 @@ func toggleReady(g *Game, pn uint, data uint) error {
 	if g.getStage() == PreDeal {
 		g.updateBlindNums()
 	}
+
+	p.Left = false
 
 	return nil
 }

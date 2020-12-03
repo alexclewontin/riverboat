@@ -31,6 +31,7 @@ type player struct {
 	Ready      bool
 	In         bool
 	Called     bool
+	Left       bool
 	TotalBuyIn uint
 	Stack      uint
 	Bet        uint
