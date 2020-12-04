@@ -151,7 +151,7 @@ func (g *Game) GeneratePlayerView(pn uint) *GameView {
 		}
 	}
 
-	if g.getStage() == PreDeal {
+	if g.getStage() == PreDeal && inCount > 1 {
 
 		showCards(g.calledNum)
 		_, scoreToBeat := BestFiveOfSeven(
@@ -176,7 +176,7 @@ func (g *Game) GeneratePlayerView(pn uint) *GameView {
 				g.communityCards[4],
 			)
 
-			if (iScore < scoreToBeat) && g.players[pni].In {
+			if (iScore <= scoreToBeat) && g.players[pni].In {
 				showCards(pni)
 				scoreToBeat = iScore
 			}
