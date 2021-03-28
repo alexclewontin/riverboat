@@ -25,8 +25,10 @@ package riverboat
 
 import (
 	"math"
+	"math/rand"
 	"sort"
 	"sync"
+	"time"
 
 	. "github.com/alexclewontin/riverboat/eval"
 )
@@ -80,6 +82,7 @@ type GameConfig struct {
 	MaxBuy     uint
 	BigBlind   uint
 	SmallBlind uint
+	Seed       int64
 }
 
 // Game represents a game of poker. It internally keeps track of state, can be mutated by actions,
@@ -101,6 +104,7 @@ type Game struct {
 	pots           []Pot
 	minRaise       uint
 	calledNum      uint
+	rand           *rand.Rand
 }
 
 func (g *Game) getStage() GameStage {
@@ -376,6 +380,12 @@ func (g *Game) updateRoundInfo() {
 
 }
 
+var defaultConfig = GameConfig{
+	BigBlind:   25,
+	SmallBlind: 10,
+	MaxBuy:     0,
+}
+
 //Exported functions related to game management (not "Actions")
 
 // NewGame is a factory method that returns a pointer to an initialized game.
@@ -388,17 +398,23 @@ func (g *Game) updateRoundInfo() {
 // 		SmallBlind:	10
 // 		MaxBuy:		0
 // 	}
-func NewGame() *Game {
+func NewGame(config *GameConfig) *Game {
 	newGame := Game{}
 
 	newGame.setStageAndBetting(PreDeal, false)
 	newGame.deck = DefaultDeck
-	newGame.config = GameConfig{
-		BigBlind:   25,
-		SmallBlind: 10,
-		MaxBuy:     0,
-	}
 	newGame.communityCards = make([]Card, 5)
+
+	if config == nil {
+		newGame.config = defaultConfig
+	} else {
+		newGame.config = *config
+	}
+	if newGame.config.Seed == 0 {
+		newGame.config.Seed = time.Now().UnixNano()
+	}
+
+	newGame.rand = rand.New(rand.NewSource(newGame.config.Seed))
 
 	return &newGame
 }

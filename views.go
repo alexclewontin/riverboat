@@ -24,6 +24,8 @@
 package riverboat
 
 import (
+	"math/rand"
+
 	. "github.com/alexclewontin/riverboat/eval"
 )
 
@@ -105,6 +107,7 @@ func (g *Game) FillFromView(gv *GameView) {
 	g.deck = append([]Card{}, gv.Deck...)
 	g.pots = copyPots(gv.Pots)
 	g.minRaise = gv.MinRaise
+	g.rand = rand.New(rand.NewSource(g.config.Seed))
 }
 
 // GeneratePlayerView is primarily for creating a view that can be serialized for delivery to a specific player
@@ -115,6 +118,7 @@ func (g *Game) GeneratePlayerView(pn uint) *GameView {
 
 	gv := g.copyToView()
 	gv.Deck = nil
+	gv.Config.Seed = 0
 
 	// D. R. Y.!
 	hideCards := func(pn2 uint) { gv.Players[pn2].Cards = [2]Card{0, 0} }

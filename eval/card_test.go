@@ -25,7 +25,9 @@ package eval
 
 import (
 	"fmt"
+	"math/rand"
 	"testing"
+	"time"
 )
 
 func TestParseCardBytes(t *testing.T) {
@@ -213,13 +215,15 @@ func TestDefaultDeck(t *testing.T) {
 }
 
 func TestShuffledDeck(t *testing.T) {
+	var r *rand.Rand
 	var testDeck Deck
 	var testDeckTwo Deck
 
+	r = rand.New(rand.NewSource(time.Now().UnixNano()))
 	testDeck = DefaultDeck
 	testDeckTwo = DefaultDeck
-	testDeck.Shuffle()
-	testDeckTwo.Shuffle()
+	testDeck.Shuffle(r)
+	testDeckTwo.Shuffle(r)
 
 	t.Run("Len", func(t *testing.T) {
 		result := len(testDeck)

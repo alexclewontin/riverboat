@@ -31,13 +31,11 @@ import (
 	"io"
 	"math/rand"
 	"regexp"
-	"time"
 	"unicode"
 	//"log"
 )
 
 func init() {
-	rand.Seed(time.Now().UnixNano())
 	cardRE = regexp.MustCompile("^\\s*(10|[2-9]|[TJQKAtjqka])([CDHScdhs])\\s*$")
 	for _, s := range suits {
 		for j := 0; j < 13; j++ {
@@ -203,7 +201,7 @@ func (d *Deck) IsEmpty() bool { return (len(*d) == 0) }
 func (d *Deck) Push(card Card) { *d = append(*d, card) }
 
 // Shuffle resets the contents of d and performs a Fisher-Yates shuffle. Post-condition: d contains all 52 unique cards, in a normally distributed random order.
-func (d *Deck) Shuffle() {
+func (d *Deck) Shuffle(rand *rand.Rand) {
 	*d = append([]Card{}, DefaultDeck...)
 	rand.Shuffle(len(*d), func(i, j int) { (*d)[i], (*d)[j] = (*d)[j], (*d)[i] })
 }
