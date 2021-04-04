@@ -50,7 +50,7 @@ func TestGame_GenerateOmniView(t *testing.T) {
 		CommunityCards []Card
 		Flags          gameFlags
 		Config         GameConfig
-		Players        []player
+		Players        []Player
 		Deck           Deck
 		Pots           []Pot
 		MinRaise       uint
@@ -78,7 +78,7 @@ func TestGame_GenerateOmniView(t *testing.T) {
 				},
 				Flags:    9,
 				Config:   GameConfig{},
-				Players:  []player{},
+				Players:  []Player{},
 				Deck:     DefaultDeck,
 				Pots:     []Pot{},
 				MinRaise: 25,
@@ -99,7 +99,7 @@ func TestGame_GenerateOmniView(t *testing.T) {
 				Stage:    PreDeal,
 				Betting:  true,
 				Config:   GameConfig{},
-				Players:  []player{},
+				Players:  []Player{},
 				Deck:     DefaultDeck,
 				Pots:     []Pot{},
 				MinRaise: 25,
@@ -159,7 +159,7 @@ func TestGame_GenerateOmniViewChangedVals(t *testing.T) {
 					BigBlind:   25,
 					SmallBlind: 10,
 				},
-				players: []player{
+				players: []Player{
 					{
 						Ready:      true,
 						In:         false,
@@ -210,7 +210,7 @@ func TestGame_GenerateOmniViewChangedVals(t *testing.T) {
 					BigBlind:   25,
 					SmallBlind: 10,
 				},
-				players: []player{
+				players: []Player{
 					{
 						Ready:      true,
 						In:         false,
