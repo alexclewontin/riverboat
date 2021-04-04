@@ -196,7 +196,7 @@ func deal(g *Game, pn uint, data uint) error {
 		g.actionNum = g.utgNum
 
 		for i := 0; i < 3; i++ {
-			g.deck.Shuffle()
+			g.deck.Shuffle(g.rand)
 		}
 
 		for i, p := range g.players {
