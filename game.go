@@ -99,7 +99,7 @@ type Game struct {
 	communityCards []Card
 	flags          gameFlags
 	config         GameConfig
-	players        []player
+	players        []Player
 	deck           Deck
 	pots           []Pot
 	minRaise       uint
@@ -136,7 +136,7 @@ func (g *Game) setStageAndBetting(s GameStage, b bool) {
 	g.setBetting(b)
 }
 
-func (g *Game) getPlayer(pn uint) *player {
+func (g *Game) getPlayer(pn uint) *Player {
 	return &g.players[pn]
 }
 
@@ -253,7 +253,7 @@ func (g *Game) updateRoundInfo() {
 		return g.players[allInPlayerNums[i]].TotalBet < g.players[allInPlayerNums[j]].TotalBet
 	}) //here, the whole slice needs to be sorted by the totalBet amount of the players represented
 
-	tmpPlayers := append([]player{}, g.players...)
+	tmpPlayers := append([]Player{}, g.players...)
 	g.pots = []Pot{}
 	for _, pn := range allInPlayerNums {
 
@@ -420,7 +420,7 @@ func NewGame(config *GameConfig) *Game {
 }
 
 func (g *Game) AddPlayer() uint {
-	g.players = append(g.players, player{})
+	g.players = append(g.players, Player{})
 	g.players[len(g.players)-1].initialize()
 	return uint(len(g.players) - 1)
 }
