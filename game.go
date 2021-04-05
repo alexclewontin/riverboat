@@ -410,13 +410,25 @@ func NewGame(config *GameConfig) *Game {
 	} else {
 		newGame.config = *config
 	}
-	if newGame.config.Seed == 0 {
-		newGame.config.Seed = time.Now().UnixNano()
-	}
 
-	newGame.rand = rand.New(rand.NewSource(newGame.config.Seed))
+	newGame.initRand()
 
 	return &newGame
+}
+
+func (g *Game) initRand() {
+	if g.config.Seed == 0 {
+		g.config.Seed = time.Now().UnixNano()
+	}
+
+	g.rand = rand.New(rand.NewSource(g.config.Seed))
+}
+
+// advanceRand resets the rng so we can expose current
+// seed in GameView
+func (g *Game) advanceRand() {
+	g.config.Seed = g.rand.Int63()
+	g.rand = rand.New(rand.NewSource(g.config.Seed))
 }
 
 func (g *Game) AddPlayer() uint {

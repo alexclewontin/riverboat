@@ -199,6 +199,8 @@ func deal(g *Game, pn uint, data uint) error {
 			g.deck.Shuffle(g.rand)
 		}
 
+		g.advanceRand()
+
 		for i, p := range g.players {
 			if p.Ready {
 				g.players[i].Cards[0] = g.deck.Pop()
